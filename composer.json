@@ -1,0 +1,12 @@
+{
+    "name": "mekaeil/laravel-translation",
+    "type": "library",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "mekaeil",
+            "email": "maikel1370@gmail.com"
+        }
+    ],
+    "require": {}
+}
