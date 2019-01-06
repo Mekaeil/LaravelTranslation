@@ -1,31 +1,21 @@
 {
-    "name": "mekaeil/laravel-translation",
-    "description": "This package used for multilingual website in Laravel framework.",
-    "type": "library",
-    "keywords": [
-      "package",
-      "laravel",
-      "translation",
-      "multilingual",
-      "multilingual package"
-    ],
-    "license": "MIT",
-    "require": {
-      "php": "^7.*",
-      "laravel/framework": "5.*"
-    },
-    "authors": [
-        {
-            "name": "mekaeil",
-            "email": "maikel1370@gmail.com"
-        }
-    ],
-    "autoload": {
-      "files": [
-        "app/Http/LaraTransHelper.php"
-      ],
-      "psr-4": {
-        "Mekaeil\\LaravelTranslation\\": "src/"
-      }
+  "name": "mekaeil/laravel-translation",
+  "description": "This package used for multilingual website in Laravel framework.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "mekaeil",
+      "email": "maikel1370@gmail.com"
     }
+  ],
+  "require": {},
+  "autoload": {
+    "files": [
+      "app/Http/LaraTransHelper.php"
+    ],
+    "psr-4": {
+      "Mekaeil\\LaravelTranslation\\": "src/"
+    }
+  }
 }
