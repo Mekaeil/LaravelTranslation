@@ -1,6 +1,6 @@
 <?php
 
-namespace Mekaeil\LaravelTranslation\src;
+namespace Mekaeil\LaravelTranslation;
 
 use Illuminate\Support\ServiceProvider;
 use Mekaeil\LaravelTranslation\Repository\Contracts\BaseRepositoryInterface;
@@ -9,7 +9,6 @@ use Mekaeil\LaravelTranslation\Repository\Contracts\ModuleRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\BaseEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\FlagEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\ModuleEloquent;
-use Mekaeil\LaravelTranslation\TransHelper\TransHelper;
 
 class LaravelTranslationProvider extends ServiceProvider
 {
