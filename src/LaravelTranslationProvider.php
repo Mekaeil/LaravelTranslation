@@ -86,5 +86,9 @@ class LaravelTranslationProvider extends ServiceProvider
 
         require_once "TransHelper.php";
 
+        if (file_exists( app_path("Http/LaraTransHelper.php") )){
+            require_once app_path("Http/LaraTransHelper.php");
+        }
+
     }
 }
