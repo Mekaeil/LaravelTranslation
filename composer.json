@@ -11,11 +11,16 @@
   ],
   "require": {},
   "autoload": {
-    "files": [
-      "app/Http/LaraTransHelper.php"
-    ],
     "psr-4": {
       "Mekaeil\\LaravelTranslation\\": "src/"
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Mekaeil\\LaravelTranslation\\LaravelTranslationProvider"
+      ]
+    }
   }
+
 }
