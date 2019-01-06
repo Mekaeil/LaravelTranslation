@@ -1,0 +1,69 @@
+.logo-side{
+    width           : 22%;
+    border-radius   : 100%;
+    border          : 2px solid #fff;
+    padding         : 5px;
+}
+
+.nav-sm .logo-side{
+    width           : 80%;
+}
+
+.menu_section h3 {
+    padding         : 1em 1.2em;
+    color           : #fff;
+    text-transform  : uppercase;
+    letter-spacing  : 1px;
+    font-weight     : 400;
+    font-size       : 1em;
+    margin          : 1em 0;
+    text-shadow     : 1px 1px #1c2833;
+    background      : #405a73;
+    border-bottom   : 1px solid #777;
+}
+
+.agencies .costumersTable > tbody > tr > td{
+    padding     : 1.5em 0em;
+    font-size   : 1em;
+}
+
+.agencies .costumersTable > tbody > tr > td > a:first-child{
+    font-size       : 1.5em;
+    display         : inline-block;
+    vertical-align  : middle;
+    margin-left     : 0.25em;
+    cursor          : pointer;
+}
+
+.agencyDetail a{
+    display         : inline-block;
+    padding         : 0.5em 1em;
+    border          : 1px solid #ccc;
+    color           : #34495e;
+    border-radius   : 3px;
+    transition      : all 0.7s;
+}
+
+.agencyDetail a:hover{
+    background  : #00BC9D;
+    color       : #fff;
+}
+
+.agencies .costumersTable > tbody > tr.agencyDetail > td{
+    padding: 1em;
+}
+
+.hidden{
+    display: none;
+}
+
+.filter{
+    margin: 1.7em 0 0;
+}
+.removeFilter{
+    margin-top : 1.7em;
+}
+
+.dropdown.bootstrap-select> button.dropdown-toggle{
+    border : 1px solid #ccc !important;
+}
