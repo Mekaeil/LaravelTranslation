@@ -12,6 +12,7 @@ return [
         // this data used for add relation between language setting and user
 
         'users_table'       => 'users',
+        'users_id_table'    => 'id',
 
 
     /*
@@ -39,6 +40,7 @@ return [
         'translation_flags_table'       => 'trans_langs',
         'translation_base_table'        => 'trans_translation',
         'translation_module_table'      => 'trans_module_translation',
+        'translation_style_table'       => 'trans_style',
 
 
     /*
