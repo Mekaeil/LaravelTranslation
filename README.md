@@ -101,37 +101,37 @@ you should be use **{!! !!}** like this:
 first you should use **TransHelper** in you controller.
 
 ```
-use Mekaeil\LaravelTranslation\TransHelper\TransHelper;
+use Mekaeil\LaravelTranslation\Repository\Facade\Translation;
 ```
 
 #### Languages
 
 Get all of the languages
 ``` 
-$this->allLangs();
+Translation::allLangs();
 ```
 Get **Default** language
 ``` 
-$this->defaultLang();
+Translation::defaultLang();
 ```
 
 #### Base Translation Words
 
 Get all of the words in database :
 ``` 
- $this->baseWords();
+Translation::baseWords();
 ```
 Get English words ( paginate : 15 )
  ``` 
-  $this->baseWords(null ,'en' , 15);
+Translation::baseWords(null ,'en' , 15);
  ```
 Get welcome word in Persian language
  ``` 
-  $this->baseWords('welcome' ,'fa');
+Translation::baseWords('welcome' ,'fa');
  ```
 Get welcome word base current local 
  ``` 
-  $this->baseWords('welcome');
+Translation::baseWords('welcome');
  ```
 
 

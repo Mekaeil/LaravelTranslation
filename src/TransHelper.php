@@ -5,7 +5,7 @@ namespace Mekaeil\LaravelTranslation\TransHelper;
 use Mekaeil\LaravelTranslation\Repository\Contracts\BaseRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\FlagRepositoryInterface;
 
-trait TransHelper
+class TransHelper
 {
 
     private function appLangRegister(){
