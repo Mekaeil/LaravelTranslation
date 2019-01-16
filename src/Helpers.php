@@ -6,14 +6,7 @@
  *
  */
 
-use Mekaeil\LaravelTranslation\TransHelper;
-class Trans{
-    use TransHelper;
-
-    public function translator($word,$lang,$where){
-        return $this->translation($word,$lang,$where);
-    }
-}
+use Mekaeil\LaravelTranslation\Repository\Facade\Translation;
 
 if (!function_exists('translation'))
 {
@@ -26,8 +19,7 @@ if (!function_exists('translation'))
      */
     function translation($word, $lang=null, $where='file')
     {
-        $accessTrans = new Trans();
-        return $accessTrans->translator($word,$lang,$where);
+        return Translation::translation($word,$lang,$where);
     }
 
 }

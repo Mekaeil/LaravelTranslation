@@ -9,6 +9,7 @@ use Mekaeil\LaravelTranslation\Repository\Contracts\ModuleRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\BaseEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\FlagEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\ModuleEloquent;
+use Mekaeil\LaravelTranslation\TransHelper\TransHelper;
 
 class LaravelTranslationProvider extends ServiceProvider
 {
@@ -83,7 +84,9 @@ class LaravelTranslationProvider extends ServiceProvider
 
         $this->app->bind(ModuleRepositoryInterface::class, ModuleEloquent::class);
 
-        require_once "TransHelper.php";
+        $this->app->bind('translation', function ($app){
+            return new TransHelper();
+        });
 
         if (file_exists( app_path("Http/LaraTransHelper.php") )){
             require_once app_path("Http/LaraTransHelper.php");
