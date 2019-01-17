@@ -56,7 +56,8 @@ return [
     |
     */
 
-
+        'save_language_with'            => 'cookie',    // cookie, session
+        'cookie_expire_time'            => 90,          // 90 days
 
 ];
 

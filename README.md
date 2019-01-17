@@ -76,6 +76,10 @@ you can use it in your blade:
 ```
 translation($text,$lang,$where)
 ```
+```
+_trans($text,$lang,$where)
+```
+
 * $lang and $where are optional. ( Default $lang set base your locale project )
 * $where can be one of the 'file' or 'db' ( Default is 'file')
  
@@ -83,10 +87,16 @@ translation($text,$lang,$where)
 ```
 translation('welcome','en','db')
 ```
+```
+_trans('welcome','en','db')
+```
 
 search 'welcome' key in 'file' language.  
 ```
 translation('welcome')
+```
+```
+_trans('welcome')
 ```
 
 search 'welcome' in Database and display it, but if could not find
@@ -94,11 +104,18 @@ search 'welcome' in Database and display it, but if could not find
 ```
 translation('welcome',null,'db')
 ```
+```
+_trans('welcome',null,'db')
+```
+
 It is important if you have html tag in your translation value when inserting in Database 
 you should be use **{!! !!}** like this:
 
 ```
 {!! translation('welcome','en','db') !!}
+```
+```
+{!! _trans('welcome','en','db') !!}
 ```
 
 ## Controller 
@@ -144,6 +161,26 @@ Get welcome word base current local
  ``` 
 Translation::baseWords('welcome');
  ```
+ 
+Set User Language:
+* $userID   : User id (int)
+* $langID   : Language id (int) (default: null)
+* $langWith : cookie or session, (string) (default:cookie)
+```
+Translation::setUserLocale($userID, $langID, $langWith)
+```
+Setting the user's language with id: 27 to the language that user selected before!
+```
+Translation::setUserLocale(27)
+```
+Set the user's language with id:27 to the language with id:3
+```
+Translation::setUserLocale(27,3)
+```
+Set the user's language with id:27 to the language with id:3 and use session for user
+```
+Translation::setUserLocale(27,3,'session')
+```
 
 
 # Overwrite **trans()** method
