@@ -53,6 +53,7 @@ class MasterFlagTranslation extends Seeder
                     'display_name'  => $lang['display_name'],
                     'status'        => $lang['status'] ?? false,
                     'default'       => $lang['default'] ?? false,
+                    'direction'     => $lang['direction'] ?? 'ltr',
                 ]);
                 continue;
             }
@@ -62,6 +63,7 @@ class MasterFlagTranslation extends Seeder
                 'display_name'  => $lang['display_name'],
                 'status'        => $lang['status'],
                 'default'       => $lang['default'],
+                'direction'     => $lang['direction'] ?? 'ltr',
             ]);
 
             $this->command->info('THIS LANGUAGE << '. $lang['name'] . ' >> CREATED!');

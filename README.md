@@ -29,7 +29,12 @@ php artisan vendor:publish
 ```
 
 ### Migration [ step : 3 ]
-before migration you can change TABLE names in config file.
+before migration you should take a look the config file.
+* define your users table, user model and user id 
+* if you want to change the translation's table name you can change it.
+* add or edit middleware routes.
+
+**it is important to add <span style="background:#95a5a6;color:#000;padding:0 2px;display:inline;">lang_id</span> in your fillable columns in user model.**
     
 ```
 config > laravel-translation.php
@@ -71,6 +76,10 @@ you can use it in your blade:
 ```
 translation($text,$lang,$where)
 ```
+```
+_trans($text,$lang,$where)
+```
+
 * $lang and $where are optional. ( Default $lang set base your locale project )
 * $where can be one of the 'file' or 'db' ( Default is 'file')
  
@@ -78,10 +87,16 @@ translation($text,$lang,$where)
 ```
 translation('welcome','en','db')
 ```
+```
+_trans('welcome','en','db')
+```
 
 search 'welcome' key in 'file' language.  
 ```
 translation('welcome')
+```
+```
+_trans('welcome')
 ```
 
 search 'welcome' in Database and display it, but if could not find
@@ -89,12 +104,47 @@ search 'welcome' in Database and display it, but if could not find
 ```
 translation('welcome',null,'db')
 ```
+```
+_trans('welcome',null,'db')
+```
+
 It is important if you have html tag in your translation value when inserting in Database 
 you should be use **{!! !!}** like this:
 
 ```
 {!! translation('welcome','en','db') !!}
 ```
+```
+{!! _trans('welcome','en','db') !!}
+```
+
+#### Create your own helper function in Blade theme
+
+You can define your helper function for translate words in your blade theme.
+use this in top of the file :
+``` 
+use Mekaeil\LaravelTranslation\Repository\Facade\Translation;
+```
+add this function in your **helper** file.
+```
+if (!function_exists('YOUR_FUNCTION_NAME'))
+{
+
+    /**
+     * @param $word
+     * @param null $lang
+     * @param string $where
+     * @return mixed
+     */
+    function YOUR_FUNCTION_NAME($word, $lang=null, $where='file')
+    {
+        return Translation::translation($word,$lang,$where);
+    }
+
+}
+```
+<br>
+<br>
 
 ## Controller 
 
@@ -110,9 +160,15 @@ Get all of the languages
 ``` 
 Translation::allLangs();
 ```
-Get **Default** language
+Get **Default** language in the project.
 ``` 
 Translation::defaultLang();
+```
+
+Get User Default Language, if the user selected language in the self-account, otherwise returns default language in the system.
+```
+$user = Auth::user();
+return Translation::defaultLang($user->id);
 ```
 
 #### Base Translation Words
@@ -133,6 +189,26 @@ Get welcome word base current local
  ``` 
 Translation::baseWords('welcome');
  ```
+ 
+Set User Language:
+* $userID   : User id (int)
+* $langID   : Language id (int) (default: null)
+* $langWith : cookie or session, (string) (default:cookie)
+```
+Translation::setUserLocale($userID, $langID, $langWith)
+```
+Setting the user's language with id: 27 to the language that user selected before!
+```
+Translation::setUserLocale(27)
+```
+Set the user's language with id:27 to the language with id:3
+```
+Translation::setUserLocale(27,3)
+```
+Set the user's language with id:27 to the language with id:3 and use session for user
+```
+Translation::setUserLocale(27,3,'session')
+```
 
 
 # Overwrite **trans()** method
