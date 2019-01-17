@@ -8,9 +8,11 @@
 |
 */
 
+    $middlewares =  config('laravel-translation.middleware');
+
     Route::group([
         'namespace'     => 'Mekaeil\LaravelTranslation\Http\Controller',
-        'middleware'    => 'web',
+        'middleware'    => $middlewares,
         'as'            => 'admin.trans.',
         'prefix'        => 'admin/translation',
     ],

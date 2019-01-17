@@ -12,6 +12,7 @@ return [
         // this data used for add relation between language setting and user
 
         'users_table'       => 'users',
+        'user_model'        => \App\User::class,
         'users_id_table'    => 'id',
 
 
@@ -25,6 +26,10 @@ return [
         'base_word_index'   => 'admin.trans.base.index',
         'languages_index'   => 'admin.trans.lang.index',
         'modules_index'     => 'admin.trans.module.index',
+
+        'middleware'        => [
+            'web','auth'
+        ],
 
 
     /*

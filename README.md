@@ -29,7 +29,12 @@ php artisan vendor:publish
 ```
 
 ### Migration [ step : 3 ]
-before migration you can change TABLE names in config file.
+before migration you should take a look the config file.
+* define your users table, user model and user id 
+* if you want to change the translation's table name you can change it.
+* add or edit middleware routes.
+
+**it is important to add <span style="background:#95a5a6;color:#000;padding:0 2px;display:inline;">lang_id</span> in your fillable columns in user model.**
     
 ```
 config > laravel-translation.php
@@ -110,9 +115,15 @@ Get all of the languages
 ``` 
 Translation::allLangs();
 ```
-Get **Default** language
+Get **Default** language in the project.
 ``` 
 Translation::defaultLang();
+```
+
+Get User Default Language, if the user selected language in the self-account, otherwise returns default language in the system.
+```
+$user = Auth::user();
+return Translation::defaultLang($user->id);
 ```
 
 #### Base Translation Words

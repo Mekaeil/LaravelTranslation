@@ -4,6 +4,7 @@ namespace Mekaeil\LaravelTranslation\TransHelper;
 
 use Mekaeil\LaravelTranslation\Repository\Contracts\BaseRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\FlagRepositoryInterface;
+use Mekaeil\LaravelTranslation\Repository\Contracts\UserRepositoryInterface;
 
 class TransHelper
 {
@@ -16,18 +17,31 @@ class TransHelper
         return app(BaseRepositoryInterface::class);
     }
 
+    private function appUserRegister(){
+        return app(UserRepositoryInterface::class);
+    }
+
     /**
      * @return mixed
      */
-    public function allLangs(){
-
+    public function allLangs()
+    {
         return $this->appLangRegister()->all();
     }
 
     /**
      * @return mixed
      */
-    public function defaultLang(){
+    public function defaultLang(int $userID=null)
+    {
+        if ($userID)
+        {
+            $getUser = $this->appUserRegister()->find($userID);
+            if ($langID = $getUser->lang_id)
+            {
+                return $getLang = $this->appLangRegister()->find($langID);
+            }
+        }
 
         return $this->appLangRegister()->getRecord([
             'default'   => true,

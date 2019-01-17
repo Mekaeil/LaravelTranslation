@@ -6,9 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use Mekaeil\LaravelTranslation\Repository\Contracts\BaseRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\FlagRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\ModuleRepositoryInterface;
+use Mekaeil\LaravelTranslation\Repository\Contracts\UserRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\BaseEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\FlagEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\ModuleEloquent;
+use Mekaeil\LaravelTranslation\Repository\Eloquents\UserEloquent;
 use Mekaeil\LaravelTranslation\TransHelper\TransHelper;
 
 class LaravelTranslationProvider extends ServiceProvider
@@ -83,6 +85,8 @@ class LaravelTranslationProvider extends ServiceProvider
         $this->app->bind(BaseRepositoryInterface::class, BaseEloquent::class);
 
         $this->app->bind(ModuleRepositoryInterface::class, ModuleEloquent::class);
+
+        $this->app->bind(UserRepositoryInterface::class, UserEloquent::class);
 
         $this->app->bind('translation', function ($app){
             return new TransHelper();
