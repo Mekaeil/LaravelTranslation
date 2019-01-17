@@ -26,7 +26,7 @@ class TransHelper
      */
     public function allLangs()
     {
-        return $this->appLangRegister()->all();
+        return $this->appLangRegister()->all([],[],null,['status' => true]);
     }
 
     /**
