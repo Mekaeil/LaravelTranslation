@@ -118,6 +118,34 @@ you should be use **{!! !!}** like this:
 {!! _trans('welcome','en','db') !!}
 ```
 
+#### Create your own helper function in Blade theme
+
+You can define your helper function for translate words in your blade theme.
+use this in top of the file :
+``` 
+use Mekaeil\LaravelTranslation\Repository\Facade\Translation;
+```
+add this function in your **helper** file.
+```
+if (!function_exists('YOUR_FUNCTION_NAME'))
+{
+
+    /**
+     * @param $word
+     * @param null $lang
+     * @param string $where
+     * @return mixed
+     */
+    function YOUR_FUNCTION_NAME($word, $lang=null, $where='file')
+    {
+        return Translation::translation($word,$lang,$where);
+    }
+
+}
+```
+<br>
+<br>
+
 ## Controller 
 
 first you should use **TransHelper** in you controller.

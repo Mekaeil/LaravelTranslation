@@ -56,8 +56,10 @@ return [
     |
     */
 
-        'save_language_with'            => 'cookie',    // cookie, session
-        'cookie_expire_time'            => 90,          // 90 days
+        'save_language_with'            => 'cookie',        // cookie, session
+        'cookie_expire_time'            => 90,              // 90 days
+        'translation_file_name'         => 'laraTrans'      // path file : resource > lang > {lang} > laraTrans.php
+
 
 ];
 

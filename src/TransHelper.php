@@ -112,6 +112,9 @@ class TransHelper
      */
     public function translation($key, $lang=null, $where='file')
     {
+        $fileName   = config('laravel-translation.translation_file_name');
+        $key        = $fileName . '.' . $key;
+
         if (is_null($lang)){
             $lang = app()->getLocale();
         }
@@ -147,30 +150,7 @@ class TransHelper
      */
     public function _trans($key, $lang=null, $where='file')
     {
-        if (is_null($lang)){
-            $lang = app()->getLocale();
-        }
-
-        if ($where=='file'){
-            return trans($key,[],$lang);
-        }
-
-        if ($where=='db'){
-
-            $ifLangExist = $this->appLangRegister()->getRecord([
-                'name'    => $lang,
-            ],true);
-
-            if (is_null($ifLangExist)){
-                return $this->translation($key);
-            }
-
-            return $this->appBaseWordRegister()->getRecord([
-                'key'   =>  $key,
-                'lang'  =>  $ifLangExist->id,
-            ],true)->value;
-        }
-
+       return $this->translation($key,$lang,$where);
     }
 
     public function getUserLocale()
