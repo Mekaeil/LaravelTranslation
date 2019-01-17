@@ -24,4 +24,20 @@ if (!function_exists('translation'))
 
 }
 
+if (!function_exists('_trans'))
+{
+
+    /**
+     * @param $word
+     * @param null $lang
+     * @param string $where
+     * @return mixed
+     */
+    function _trans($word, $lang=null, $where='file')
+    {
+        return Translation::translation($word,$lang,$where);
+    }
+
+}
+
 

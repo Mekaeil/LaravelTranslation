@@ -81,6 +81,7 @@ class FlagTranslateController extends CoreTranslateController
 
         $this->flagRepository->update($lang->id,[
             'default'   => true,
+            'status'    => true,
         ]);
 
         return redirect()->route(config('laravel-translation.languages_index'))->with('message',[
