@@ -3,6 +3,9 @@
 namespace Mekaeil\LaravelTranslation\TransHelper;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
 use Mekaeil\LaravelTranslation\Repository\Contracts\BaseRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\FlagRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\UserRepositoryInterface;
@@ -20,6 +23,86 @@ class TransHelper
 
     private function appUserRegister(){
         return app(UserRepositoryInterface::class);
+    }
+
+    /**
+     * @param int|null $days
+     * @return \Illuminate\Config\Repository|int|mixed
+     */
+    private function calcCookieTime(int $days=null)
+    {
+        if (!$days)
+        {
+            $days = config('laravel-translation.cookie_expire_time') ?? 90;
+        }
+
+        return $days * ( 24 * 60 );
+    }
+
+    /**
+     * @param $cookieName
+     * @param $cookieValue
+     * @param $cookieTime
+     * @param null $path
+     */
+    private function setCookie($cookieName , $cookieValue , $cookieTime , $path=null)
+    {
+        Cookie::queue(
+            $cookieName , $cookieValue , $cookieTime , $path
+        );
+    }
+
+    /**
+     * @param $cookieName
+     * @param string $path
+     */
+    private function deleteCookie($cookieName , $path='/')
+    {
+
+        if (is_array($cookieName))
+        {
+            foreach ($cookieName as $key => $value)
+            {
+                if(Request::hasCookie($value)){
+                    $this->deleteCookie($value);
+                }
+            }
+            return true;
+        }
+
+        Cookie::queue(
+            $cookieName , '' , -1 , $path
+        );
+        return true;
+
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    private function deleteSession($key)
+    {
+
+        if (is_array($key))
+        {
+            foreach ($key as $item)
+            {
+                $this->deleteSession($item);
+            }
+
+            return true;
+        }
+
+        if ($key=='all')
+        {
+            Session::flush();
+            return true;
+        }
+
+        Session::forget($key);
+        return true;
+
     }
 
     /**
@@ -164,6 +247,12 @@ class TransHelper
 
     }
 
+    /**
+     * @param int $userID
+     * @param int|null $langID
+     * @param string|null $langWith
+     * @return bool
+     */
     public function setUserLocale(int $userID, int $langID=null, string $langWith=null)
     {
         $langWith = $langWith ?? config('laravel-translation.save_language_with');
@@ -171,7 +260,6 @@ class TransHelper
 
         if (!$user && ($user->lang_id || !$langID) )
         {
-            dd('ddd');
             return false;
         }
 
@@ -204,36 +292,41 @@ class TransHelper
 
         /////////////////////////////////////////////////////////////////
 
-
         if ($langWith == 'cookie')
         {
-            cookie('language', $language->name, $this->calcCookieTime());
-            cookie('direction',$language->direction, $this->calcCookieTime());
+            $this->setCookie( 'language' ,$language->name ,$this->calcCookieTime() );
+            $this->setCookie( 'direction' ,$language->direction ,$this->calcCookieTime() );
             App::setLocale($language->name);
             return true;
         }
 
-        session('language', $language->name);
-        session('direction', $language->direction);
+        session([
+            'language' => $language->name,
+            'direction'=> $language->direction
+        ]);
         App::setLocale($language->name);
         return true;
     }
 
-    public function clearCacheLocale(int $userID)
+    /**
+     * @param $parameters
+     * @return bool
+     */
+    public function clearCache($parameters, $where=null)
     {
-        $clearCacheIn = config('laravel-translation.save_language_with');
-    }
 
-    private function calcCookieTime(int $days=null)
-    {
-        if (!$days)
+        $clearCacheIn = $where ?? config('laravel-translation.save_language_with');
+
+        if ($clearCacheIn == 'cookie')
         {
-            $days = config('laravel-translation.cookie_expire_time') ?? 90;
+            $this->deleteCookie($parameters);
+            return true;
         }
 
-        return $days * ( 24 * 60 );
-    }
+        $this->deleteSession($parameters);
+        return true;
 
+    }
 
 }
 

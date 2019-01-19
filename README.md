@@ -210,6 +210,37 @@ Set the user's language with id:27 to the language with id:3 and use session for
 Translation::setUserLocale(27,3,'session')
 ```
 
+#### Clear Cache
+It's important before anything set config file, in laravel-translation config file you 
+can set type of save user data in browser on **Cookie** or **Session**.
+
+Clear Cache An Item In Session
+``` 
+Translation::clearCache('language','session');
+```
+
+Clear Cache An Array In Session
+``` 
+Translation::clearCache(['language','direction'],'session');
+```
+<br>
+
+**If you set the storage save data, it doesn't need to pass second argument.** 
+<br>
+
+Clear Cache An Item
+``` 
+Translation::clearCache('language');
+```
+Clear Cache An Array
+``` 
+Translation::clearCache(['language','direction']);
+```
+Clear all of the **SESSION** exists in user's browser
+``` 
+Translation::clearCache('all','session');
+```
+
 
 # Overwrite **trans()** method
     
