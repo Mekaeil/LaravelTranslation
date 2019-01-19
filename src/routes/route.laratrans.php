@@ -19,7 +19,7 @@
     function (){
 
         // admin.trans.lang.index
-        Route::get('/languages-translation', 'FlagTranslateController@index')
+        Route::get('/languages', 'FlagTranslateController@index')
             ->name('lang.index');
 
         // admin.trans.lang.create
@@ -50,7 +50,7 @@
         /// BASE TRANSLATION SECTION
         ///////////////////////////////////////////////////////////////////////
         Route::group([
-            'prefix'    => 'base-translation',
+            'prefix'    => 'base',
             'as'        => 'base.',
         ],
         function (){
@@ -85,7 +85,7 @@
         /// MODULE TRANSLATION SECTION
         ///////////////////////////////////////////////////////////////////////
         Route::group([
-            'prefix'    => 'modules-translation',
+            'prefix'    => 'modules',
             'as'        => 'module.',
         ],
         function (){
@@ -112,6 +112,39 @@
 
         });
 
+        /// ASSET TRANSLATION
+        /////////////////////////////////////////////////////////////////////
+        Route::group([
+            'prefix'    => 'assets',
+            'as'        => 'assets.',
+        ],
+            function (){
+
+                // admin.trans.assets.index
+                Route::get('/list', 'AssetsTranslateController@index')
+                    ->name('index');
+
+                // admin.trans.assets.create
+                Route::get('/create', 'AssetsTranslateController@create')
+                    ->name('create');
+
+                // admin.trans.assets.store
+                Route::post('/store', 'AssetsTranslateController@store')
+                    ->name('store');
+
+                // admin.trans.assets.edit
+                Route::get('/edit/{asset}', 'AssetsTranslateController@edit')
+                    ->name('edit');
+
+                // admin.trans.assets.update
+                Route::post('/update/{asset}', 'AssetsTranslateController@update')
+                    ->name('update');
+
+                // admin.trans.assets.delete.confirm
+                Route::delete('/delete-confirm/{asset}', 'AssetsTranslateController@delete')
+                    ->name('delete.confirm');
+
+            });
 
 
     });
