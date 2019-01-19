@@ -133,15 +133,15 @@
                     ->name('store');
 
                 // admin.trans.assets.edit
-                Route::get('/edit/{trans}', 'AssetsTranslateController@edit')
+                Route::get('/edit/{asset}', 'AssetsTranslateController@edit')
                     ->name('edit');
 
                 // admin.trans.assets.update
-                Route::post('/update/{trans}', 'AssetsTranslateController@update')
+                Route::post('/update/{asset}', 'AssetsTranslateController@update')
                     ->name('update');
 
                 // admin.trans.assets.delete.confirm
-                Route::delete('/delete-confirm/{trans}', 'AssetsTranslateController@delete')
+                Route::delete('/delete-confirm/{asset}', 'AssetsTranslateController@delete')
                     ->name('delete.confirm');
 
             });

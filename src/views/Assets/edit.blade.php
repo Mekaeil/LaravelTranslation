@@ -21,7 +21,7 @@
             ],
             [
                 'link'  => '#',
-                'name'  => 'Add new asset',
+                'name'  => 'Edit asset',
             ]
         ]
     ])
@@ -35,7 +35,7 @@
             {{-- RESULT TABLE --}}
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Add New Asset</h2>
+                    <h2>Edit Asset</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
@@ -43,7 +43,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form action="{{ route('admin.trans.assets.store') }}" method="POST">
+                    <form action="{{ route('admin.trans.assets.update', $asset) }}" method="POST">
                         {{ csrf_field() }}
 
                         <div class="row">
@@ -59,7 +59,7 @@
                                 'parentInputClass'  => 'col-md-4',
                                 'labelClass'        => 'col-md-12',
                                 'list'              => $languages,
-                                'selected'          => '',
+                                'selected'          => $asset->lang_id,
                                 'load'              => 'true',
                             ])
 
@@ -75,7 +75,7 @@
                                 'parentInputClass'  => 'col-md-4',
                                 'labelClass'        => 'col-md-12',
                                 'list'              => $types,
-                                'selected'          => '',
+                                'selected'          => $asset->type,
                                 'load'              => 'false',
                             ])
 
@@ -91,7 +91,7 @@
                                 'parentInputClass'  => 'col-md-4',
                                 'labelClass'        => 'col-md-12',
                                 'list'              => $pathType,
-                                'selected'          => 'asset',
+                                'selected'          => $asset->path_type,
                                 'load'              => 'false',
                             ])
                         </div>
@@ -109,14 +109,14 @@
                                 'parentInputClass'  => 'col-md-4',
                                 'labelClass'        => 'col-md-12',
                                 'list'              => $positionAssets,
-                                'selected'          => 'asset',
+                                'selected'          => $asset->where,
                                 'load'              => 'false',
                             ])
 
                             @include('LaraTrans::Layouts.text-field',[
                                  'name'              => 'source',
                                  'type'              => 'textarea',
-                                 'value'             => old('source'),
+                                 'value'             => $asset->source,
                                  'placeHolder'       => 'Src/href,...',
                                  'required'          => 'true',
                                  'parentInputClass'  => 'col-md-12',
@@ -128,7 +128,7 @@
                             @include('LaraTrans::Layouts.switch',[
                                 'load'          => 'true',
                                 'parentClass'   => 'form-group',
-                                'checked'       => 'checked',
+                                'checked'       => $asset->status ? 'checked' : '',
                                 'name'          => 'status',
                                 'text'          => 'Active',
                             ])

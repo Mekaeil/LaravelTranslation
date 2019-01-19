@@ -100,9 +100,9 @@
                                     <td>{{ $asset->where }}</td>
                                     <td>{{ $asset->source }}</td>
                                     <td>
-                                        {{--<a href="{{ route('admin.trans.asset.edit', $asset) }}" class="btn btn-sm btn-default">--}}
-                                            {{--Edit--}}
-                                        {{--</a>--}}
+                                        <a href="{{ route('admin.trans.assets.edit', $asset) }}" class="btn btn-sm btn-default">
+                                            Edit
+                                        </a>
 
                                         @include('LaraTrans::Layouts.modal',[
                                             'title'     => 'Assets Translation',

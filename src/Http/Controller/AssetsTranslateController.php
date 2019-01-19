@@ -4,6 +4,7 @@ namespace Mekaeil\LaravelTranslation\Http\Controller;
 
 use Illuminate\Http\Request;
 use Mekaeil\LaravelTranslation\Http\Requests\Asset\StoreAssets;
+use Mekaeil\LaravelTranslation\Http\Requests\Asset\UpdateAsset;
 use Mekaeil\LaravelTranslation\Models\AssetTranslation;
 use Mekaeil\LaravelTranslation\Models\BaseTranslation;
 use Mekaeil\LaravelTranslation\Repository\Contracts\AssetRepositoryInterface;
@@ -86,7 +87,7 @@ class AssetsTranslateController extends CoreTranslateController
 
         return redirect()->route(config('laravel-translation.assets_index'))->with('message',[
             'type'  => 'success',
-            'text'  => "This asset << ' $asset->source '>> added successfully in ". $asset->where ." !",
+            'text'  => "This asset << $asset->source >> added successfully in ' $asset->where ' !",
         ]);
     }
 
@@ -99,7 +100,7 @@ class AssetsTranslateController extends CoreTranslateController
         $pathType       = $this->assetRepository->getPathType();
         $positionAssets = $this->assetRepository->getPositionStyle();
 
-        return view('LaraTrans::BaseWords.edit', compact(
+        return view('LaraTrans::Assets.edit', compact(
             'asset',
                  'languages',
                     'types',
@@ -107,32 +108,21 @@ class AssetsTranslateController extends CoreTranslateController
                     'positionAssets'));
     }
 
-
-    public function update(UpdateBaseWords $request ,BaseTranslation $trans)
+    public function update(UpdateAsset $request ,AssetTranslation $asset)
     {
-        if ($trans->key != $request->key){
+        $language   = $this->flagRepository->find($request->lang);
 
-            $ifExist = $this->baseRepository->getRecord([
-                'key'       => $request->key,
-                'locale'    => $trans->locale,
-            ],true);
-
-            if ($ifExist){
-                return redirect()->back()->with('message',[
-                    'type'  => 'danger',
-                    'text'  => 'This word Exist! please add new word.'
-                ]);
-            }
-        }
-
-        $this->baseRepository->update($trans->id,[
-            'key'   => $request->key,
-            'value' => $request->value,
+        $this->assetRepository->update($asset->id,[
+            'lang_id'   => $language->id,
+            'source'    => $request->source,
+            'type'      => $request->type,
+            'where'     => $request->where,
+            'status'    => $request->status ? 1 : 0,
         ]);
 
-        return redirect()->route(config('laravel-translation.base_word_index'))->with('message',[
+        return redirect()->route(config('laravel-translation.assets_index'))->with('message',[
             'type'  => 'success',
-            'text'  => "This word ' $trans->key ' updated successfully!",
+            'text'  => "This asset << $asset->source >> updated successfully in ' $asset->where ' !",
         ]);
     }
 

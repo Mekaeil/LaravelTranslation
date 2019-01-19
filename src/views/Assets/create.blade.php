@@ -109,7 +109,7 @@
                                 'parentInputClass'  => 'col-md-4',
                                 'labelClass'        => 'col-md-12',
                                 'list'              => $positionAssets,
-                                'selected'          => 'asset',
+                                'selected'          => '',
                                 'load'              => 'false',
                             ])
 
