@@ -127,15 +127,14 @@ class AssetsTranslateController extends CoreTranslateController
     }
 
 
-    public function delete(BaseTranslation $trans)
+    public function delete(AssetTranslation $asset)
     {
-        $wordKey = $trans->key;
+        $assetSource = $asset->source;
+        $this->assetRepository->delete($asset->id);
 
-        $this->baseRepository->delete($trans->id);
-
-        return redirect()->route(config('laravel-translation.base_word_index'))->with('message',[
+        return redirect()->route(config('laravel-translation.assets_index'))->with('message',[
             'type'  => 'warning',
-            'text'  => "This word ' $wordKey ' DELETED successfully!",
+            'text'  => "This asset << $assetSource >> DELETED successfully!",
         ]);
     }
 
