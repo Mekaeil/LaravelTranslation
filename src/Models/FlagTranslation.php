@@ -23,7 +23,12 @@ class FlagTranslation extends Model
         'default',          // boolean ( default = false )
     ];
 
+    public function assets(){
+        return $this->hasMany(AssetTranslation::class,'lang_id','id');
+    }
 
-
+    public function baseWords(){
+        return $this->hasMany(BaseTranslation::class,'lang','id');
+    }
 
 }

@@ -21,5 +21,8 @@ class BaseTranslation extends Model
         'locale',   // languages string like, en, fa , ...
     ];
 
+    public function language(){
+        return $this->belongsTo(FlagTranslation::class,'lang','id');
+    }
 
 }

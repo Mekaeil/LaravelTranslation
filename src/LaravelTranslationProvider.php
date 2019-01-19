@@ -3,10 +3,12 @@
 namespace Mekaeil\LaravelTranslation;
 
 use Illuminate\Support\ServiceProvider;
+use Mekaeil\LaravelTranslation\Repository\Contracts\AssetRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\BaseRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\FlagRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\ModuleRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\UserRepositoryInterface;
+use Mekaeil\LaravelTranslation\Repository\Eloquents\AssetEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\BaseEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\FlagEloquent;
 use Mekaeil\LaravelTranslation\Repository\Eloquents\ModuleEloquent;
@@ -70,6 +72,21 @@ class LaravelTranslationProvider extends ServiceProvider
                 __DIR__ . '/Helpers.php' => app_path('/Http/LaraTransHelper.php'),
             ]);
 
+        ///  PUBLISH LANGUAGE FILES
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            $this->publishes([
+                __DIR__ . '/lang/en/laraTrans.php' => resource_path('/lang/en/laraTrans.php'),
+            ]);
+
+            $this->publishes([
+                __DIR__ . '/lang/fa/laraTrans.php' => resource_path('/lang/fa/laraTrans.php'),
+            ]);
+
+            $this->publishes([
+                __DIR__ . '/lang/ku/laraTrans.php' => resource_path('/lang/ku/laraTrans.php'),
+            ]);
+
     }
 
     /**
@@ -85,6 +102,8 @@ class LaravelTranslationProvider extends ServiceProvider
         $this->app->bind(BaseRepositoryInterface::class, BaseEloquent::class);
 
         $this->app->bind(ModuleRepositoryInterface::class, ModuleEloquent::class);
+
+        $this->app->bind(AssetRepositoryInterface::class, AssetEloquent::class);
 
         $this->app->bind(UserRepositoryInterface::class, UserEloquent::class);
 
