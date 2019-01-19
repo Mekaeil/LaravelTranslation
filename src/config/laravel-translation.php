@@ -26,6 +26,7 @@ return [
         'base_word_index'   => 'admin.trans.base.index',
         'languages_index'   => 'admin.trans.lang.index',
         'modules_index'     => 'admin.trans.module.index',
+        'assets_index'      => 'admin.trans.assets.index',
 
         'middleware'        => [
             'web','auth'

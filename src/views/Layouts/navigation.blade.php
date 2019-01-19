@@ -43,6 +43,9 @@
                             <li>
                                 <a href="{{ route('admin.trans.module.index') }}">Module Translation</a>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.trans.assets.index') }}">Assets Translation</a>
+                            </li>
                         </ul>
                     </li>
 
