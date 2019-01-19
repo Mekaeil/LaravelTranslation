@@ -153,8 +153,14 @@ class TransHelper
        return $this->translation($key,$lang,$where);
     }
 
-    public function getUserLocale()
+    public function getUserLocale($user=null)
     {
+        dd($user->lang_id);
+
+        $user = $user ?? \Auth::user();
+        $getLanguage = $user->lang_id ? $this->appLangRegister()->find($user->lang_id) : $this->defaultLang();
+
+        dd($getLanguage);
 
     }
 
@@ -165,6 +171,7 @@ class TransHelper
 
         if (!$user && ($user->lang_id || !$langID) )
         {
+            dd('ddd');
             return false;
         }
 
@@ -183,6 +190,15 @@ class TransHelper
 
         }
         else{
+
+            /// SKIP THE NON-OBJECT ERROR ;) :D
+            ////////////////////////////////////////////////////////
+            if (!$user->lang_id){
+                $this->appUserRegister()->update($user->id,[
+                    'lang_id'   => $this->defaultLang()->id
+                ]);
+            }
+
             $language = $this->appLangRegister()->find($user->lang_id);
         }
 

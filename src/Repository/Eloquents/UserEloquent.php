@@ -15,6 +15,5 @@ class UserEloquent extends CoreEloquents implements UserRepositoryInterface
     {
         $this->model = config('laravel-translation.user_model');
     }
-
-
+    
 }
