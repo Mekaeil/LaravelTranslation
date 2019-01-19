@@ -85,13 +85,15 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Key Name</th>
-                                <th>Value Name</th>
-                                <th>Locale</th>
-                                <th>Actions</th>
+                                <th>Language</th>
+                                <th>Type</th>
+                                <th>Used In</th>
+                                <th>Source</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+
                             @foreach($assets as $asset)
                                 <tr>
                                     <th scope="row">{{ $loop->iteration }}</th>
@@ -117,6 +119,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+
                         </tbody>
                     </table>
                 </div>

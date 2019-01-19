@@ -24,6 +24,8 @@ class AssetTranslation extends Model
     ];
 
 
-
+    public function language(){
+        return $this->belongsTo(FlagTranslation::class,'lang_id','id');
+    }
 
 }

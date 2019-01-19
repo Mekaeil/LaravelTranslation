@@ -126,7 +126,6 @@ class AssetsTranslateController extends CoreTranslateController
         ]);
     }
 
-
     public function delete(AssetTranslation $asset)
     {
         $assetSource = $asset->source;
