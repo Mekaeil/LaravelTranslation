@@ -53,16 +53,17 @@ When run publishing files, you can add and change seeder file in this path <br>
 <span style="background:#95a5a6;color:#000;padding:0.2em;display:inline-block;">**database > seeds >laravelTranslation**
     
 ```
-php artisan db:seed --class=Mekaeil\\LaravelTranslation\\src\\database\\seeds\\LaravelTranslationSeeder
+php artisan db:seed --class=Mekaeil\\LaravelTranslation\\database\\seeds\\LaravelTranslationSeeder
 ```
     
     
 # MAIN URLS / ROUTES
 
 ```
-* http://your-domain.com/admin/translation/languages-translation    (Route: admin.trans.lang.index)
-* http://your-domain.com/admin/translation/base-translation/list    (Route: admin.trans.base.index)
-* http://your-domain.com/admin/translation/modules-translation/list (Route: admin.trans.module.index)    
+* http://your-domain.com/admin/translation/languages    (Route: admin.trans.lang.index)
+* http://your-domain.com/admin/translation/base/list    (Route: admin.trans.base.index)
+* http://your-domain.com/admin/translation/modules/list (Route: admin.trans.module.index)    
+* http://your-domain.com/admin/translation/assets/list  (Route: admin.trans.assets.index)    
 ```
 
 # Usage

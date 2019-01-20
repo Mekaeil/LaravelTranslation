@@ -2,7 +2,7 @@
 
 namespace database\seeds\laravelTranslation;
 
-use Mekaeil\LaravelTranslation\src\database\seeds\Base\MasterBaseTranslation;
+use Mekaeil\LaravelTranslation\database\seeds\Base\MasterBaseTranslation;
 
 
 class BaseTranslation extends MasterBaseTranslation

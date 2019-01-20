@@ -1,6 +1,6 @@
 <?php
 
-namespace Mekaeil\LaravelTranslation\src\database\seeds;
+namespace Mekaeil\LaravelTranslation\database\seeds;
 
 use database\seeds\laravelTranslation\BaseTranslation;
 use database\seeds\laravelTranslation\FlagTranslation;
