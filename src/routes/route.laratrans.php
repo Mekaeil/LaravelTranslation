@@ -46,6 +46,9 @@
         Route::delete('/delete/{lang}', 'FlagTranslateController@delete')
             ->name('lang.confirm.delete');
 
+        // admin.trans.lang.switch.language
+        Route::post('/switch-language','FlagTranslateController@switchLanguage')
+            ->name('lang.switch.language');
 
         /// BASE TRANSLATION SECTION
         ///////////////////////////////////////////////////////////////////////
@@ -118,7 +121,7 @@
             'prefix'    => 'assets',
             'as'        => 'assets.',
         ],
-            function (){
+        function (){
 
                 // admin.trans.assets.index
                 Route::get('/list', 'AssetsTranslateController@index')
@@ -145,6 +148,7 @@
                     ->name('delete.confirm');
 
             });
+
 
 
     });

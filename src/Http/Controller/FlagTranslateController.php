@@ -2,18 +2,26 @@
 
 namespace Mekaeil\LaravelTranslation\Http\Controller;
 
+use Illuminate\Http\Request;
 use Mekaeil\LaravelTranslation\Http\Requests\Language\StoreLanguage;
 use Mekaeil\LaravelTranslation\Http\Requests\Language\UpdateLanguage;
 use Mekaeil\LaravelTranslation\Models\FlagTranslation;
 use Mekaeil\LaravelTranslation\Repository\Contracts\FlagRepositoryInterface;
+use Mekaeil\LaravelTranslation\Repository\Contracts\UserRepositoryInterface;
+use Mekaeil\LaravelTranslation\Repository\Facade\Translation;
 
 class FlagTranslateController extends CoreTranslateController
 {
     private $flagRepository;
+    private $userRepository;
 
-    public function __construct(FlagRepositoryInterface $flagRepo)
+    public function __construct(
+        FlagRepositoryInterface $flagRepo,
+        UserRepositoryInterface $userRepo
+    )
     {
         $this->flagRepository = $flagRepo;
+        $this->userRepository = $userRepo;
     }
 
     public function index()
@@ -101,6 +109,33 @@ class FlagTranslateController extends CoreTranslateController
             'type'  => 'warning',
             'text'  => "This language ' $language ' DELETED successfully!",
         ]);
+    }
+
+    public function switchLanguage(Request $request)
+    {
+
+        $userID     = $request->userID ?? null;
+        $langName   = $request->lang ?? null;
+
+        if ($langName && $getLanguage=$this->flagRepository->getRecord(['name'=> $request->lang]))
+        {
+
+            Translation::clearCache(['language','direction','assets']);
+
+            //// CHANGE USER DEFAULT LANGUAGE AND SET COOKIES
+            ////////////////////////////////////////////////////////////////
+            if ($userID && $user=$this->userRepository->find($userID))
+            {
+                Translation::setUserLocale($userID,$getLanguage->id);
+                return response()->json("Switch Language to $getLanguage->display_name for user with id=$userID ");
+            }
+
+            Translation::setUserLocale(null,$getLanguage->id);
+            return response()->json("Switch language to $getLanguage->display_name");
+        }
+
+        return response()->json('Language not found!!!');
+
     }
 
 }

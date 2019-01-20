@@ -46,6 +46,18 @@ After that you can migrate.
 php artisan migrate
 ```
 
+Add Provider : config > app.php
+``` 
+\Mekaeil\LaravelTranslation\LaravelTranslationProvider::class,
+```
+
+Add Middleware in Kernel File
+``` 
+use Mekaeil\LaravelTranslation\Http\Middleware\UserLocale;
+-----
+UserLocale::class,
+```
+
 ### SEEDS [ step : 4 ]
 Creating requirement and sample data in your database. It's important before seeding migrate your project.
 
@@ -122,24 +134,24 @@ you should be use **{!! !!}** like this:
 <br>
 
 ```
-{{ getLocale() }}
+{{ getUserLocale() }}
 ```
 
 Language locale and Direction saving in cookie or session,
-but if you want to getLocale you can use this method in your blade.
+but if you want to getUserLocale you can use this method in your blade.
 
 * first argument : $user [ if you want to get user local ]
 * second argument : [ lang , dir ] if you don't set anything return language data with json format.
 ``` 
-{{ getLocale(null,'lang') }} // output : en
+{{ getUserLocale(null,'lang') }} // output : en
 ```
 Get direction 
 ``` 
-{{ getLocale(null,'dir') }} // output : ltr
+{{ getUserLocale(null,'dir') }} // output : ltr
 ```
 Get User Locale
 ``` 
-{{ getLocale(\Auth::user()) }}
+{{ getUserLocale(\Auth::user()) }}
 /// output:
 {
     "id": 1,
@@ -154,7 +166,7 @@ Get User Locale
 ```
 And an other way to get user locale
 ```
-{{ getLocale() }}
+{{ getUserLocale() }}
 
 /// output :
 {
@@ -171,11 +183,76 @@ And an other way to get user locale
 **IMPORTANT**
 <br>
 
-if you want to use **getLocale()** don't pass any 
+if you want to use **getUserLocale()** don't pass any 
 argument because if the user logged in his/her account return user's language 
 otherwise returns the default language in your project. 
 
+#### AJAX SWITCH LANGUAGE / CHANGE LOCALE
+[1]: In controller pass this data to view 
+``` 
+$langs      = Translation::allLangs(true,true); // get data with pluck
+ 
+return view('home', compact('langs'));
+```
+[2]: Create selec box:
+``` 
+<select class="switchLang">
+    @foreach($langs as $key => $value)
+        <option value="{{ $key }}" {{ $key == \Cookie::get('language') ? 'selected' : '' }} >{{ $value }}</option>
+    @endforeach
+</select>
+ 
+//////// OUTPUT :
+ 
+<select class="switchLang">
+    <option value="en" selected="selected">English</option> 
+    <option value="fa">فارسی</option>
+    <option value="ku">کوردی</option>
+</select>
+```
+[3]: Set AJAX in jQuery
+``` 
+<script>
+    $(document).ready(function () {
 
+
+        $('select.switchLang').on('change', function () {
+
+            var languageID  = $(this).find(":selected").val();
+            var route       = "{{ route(config('laravel-translation.switch_language')) }}";
+            var userID      = "{{ \Auth::user() ? \Auth::user()->id : null }}";
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var formData = new FormData();
+            formData.append('lang', languageID);
+            formData.append('userID', userID);
+
+            $.ajax({
+                url           : route,
+                type          : 'POST',
+                data          : formData,
+                contentType   : false,
+                processData   : false,
+
+                success: function(data) {
+                    console.log(data);
+                    console.log('Language changed successfully!');
+                },
+                error: function () {
+                    console.log('Error Response!!!');
+                }
+            });
+
+        });
+
+    });
+</script>
+```
 
 
 #### Create your own helper function in Blade theme
@@ -216,9 +293,17 @@ use Mekaeil\LaravelTranslation\Repository\Facade\Translation;
 
 #### Languages
 
-Get all of the languages
+Get all of the languages base collection
 ``` 
 Translation::allLangs();
+```
+Get ACTIVE languages base collection
+``` 
+Translation::allLangs(true);
+```
+Get ACTIVE languages base PLUCK Data
+``` 
+Translation::allLangs(true,true);
 ```
 Get **Default** language in the project.
 ``` 
