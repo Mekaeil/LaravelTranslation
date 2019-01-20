@@ -1,6 +1,6 @@
 <?php
 
-namespace Mekaeil\LaravelTranslation\src\database\seeds\Flag;
+namespace Mekaeil\LaravelTranslation\database\seeds\Flag;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;

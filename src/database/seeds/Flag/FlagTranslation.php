@@ -2,7 +2,8 @@
 
 namespace database\seeds\laravelTranslation;
 
-use Mekaeil\LaravelTranslation\src\database\seeds\Flag\MasterFlagTranslation;
+
+use Mekaeil\LaravelTranslation\database\seeds\Flag\MasterFlagTranslation;
 
 class FlagTranslation extends MasterFlagTranslation
 {
