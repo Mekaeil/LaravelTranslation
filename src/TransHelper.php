@@ -362,16 +362,30 @@ class TransHelper
 
         /// GENERATE LINK
         ////////////////////////////////////////////////////////////////////
-        foreach ($assets as $asset)
+
+        if ($assets)
         {
-            $assetTags[$asset->type] = $this->assetTagLinkGeneration($asset->type,$asset->source,$asset->path_type);
-        }
+            foreach ($assets as $asset)
+            {
+                if ($asset->type)
+                {
+                    $assetTags[$asset->type] = $this->assetTagLinkGeneration($asset->type,$asset->source,$asset->path_type);
+                }
+                else{
+                    continue;
+                }
+            }
 
-        if(Request::hasCookie('assets')){
-            $this->deleteCookie('assets');
-        }
+            if(Request::hasCookie('assets')){
+                $this->deleteCookie('assets');
+            }
 
-        $this->setCookie('assets', json_encode($assetTags), $this->calcCookieTime());
+            if (isset($assetTags))
+            {
+                $this->setCookie('assets', json_encode($assetTags), $this->calcCookieTime());
+            }
+
+        }
 
         return true;
     }
