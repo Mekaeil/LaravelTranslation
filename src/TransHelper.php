@@ -402,6 +402,7 @@ class TransHelper
             {
                 $this->setCookie('assets', json_encode($assetTags), $this->calcCookieTime());
             }
+//            dd(Request::hasCookie('assets'));
 
         }
 

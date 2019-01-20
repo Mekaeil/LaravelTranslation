@@ -240,7 +240,8 @@ return view('home', compact('langs'));
                 processData   : false,
 
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
+                    location.reload();
                     console.log('Language changed successfully!');
                 },
                 error: function () {

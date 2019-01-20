@@ -31,7 +31,7 @@ return [
         'modules_index'     => 'admin.trans.module.index',
         'assets_index'      => 'admin.trans.assets.index',
 
-        'switch_language'   => 'admin.trans.lang.switch.language',
+        'switch_language'   => 'trans.lang.switch.language',
 
         'middleware'        => [
             'web','auth'

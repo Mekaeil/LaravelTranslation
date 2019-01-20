@@ -152,3 +152,20 @@
 
 
     });
+
+
+    Route::group([
+        'namespace'     => 'Mekaeil\LaravelTranslation\Http\Controller',
+        'middleware'    => 'web',
+        'as'            => 'trans.',
+        'prefix'        => 'translation',
+    ],
+    function (){
+
+        // trans.lang.switch.language
+        Route::post('/switch-language','FlagTranslateController@switchLanguage')
+            ->name('lang.switch.language');
+
+    });
+
+
