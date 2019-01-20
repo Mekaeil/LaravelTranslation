@@ -514,12 +514,12 @@ class TransHelper
 
         if ($langWith == 'cookie')
         {
+            $this->getAssets();
             $this->setCookie( 'language' ,$language->name ,$this->calcCookieTime() );
             $this->setCookie( 'direction' ,$language->direction ,$this->calcCookieTime() );
-            $this->getAssets();
 
-            App::setLocale($language->name);
-            return true;
+            return App::setLocale($language->name);
+
         }
 
         session([
@@ -531,8 +531,7 @@ class TransHelper
         ///////////////////////////
         $this->getAssets();
 
-        App::setLocale($language->name);
-        return true;
+        return App::setLocale($language->name);
     }
 
 
