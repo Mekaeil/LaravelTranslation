@@ -114,6 +114,19 @@
                             ])
 
                             @include('LaraTrans::Layouts.text-field',[
+                                  'name'              => 'sort',
+                                  'type'              => 'number',
+                                  'value'             => $asset->sort,
+                                  'placeHolder'       => 'priority ,...',
+                                  'required'          => 'true',
+                                  'parentInputClass'  => 'col-md-6',
+                                  'label'      => [
+                                      'value'  => 'Sort',
+                                  ],
+                            ])
+
+
+                            @include('LaraTrans::Layouts.text-field',[
                                  'name'              => 'source',
                                  'type'              => 'textarea',
                                  'value'             => $asset->source,

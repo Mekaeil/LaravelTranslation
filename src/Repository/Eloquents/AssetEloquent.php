@@ -13,10 +13,10 @@ class AssetEloquent extends CoreEloquents implements AssetRepositoryInterface
     public function getAssetTypes()
     {
         return [
-            'css_link'      => 'CSS URL',
-            'custom_css'    => 'Custom CSS',
-            'script_link'   => 'Script URL',
-            'custom_script' => 'Custom Script',
+            'link_style'    => 'CSS URL',
+            'styleـcustom'  => 'Custom CSS',
+            'link_script'   => 'Script URL',
+            'scriptـcustom' => 'Custom Script',
         ];
     }
 

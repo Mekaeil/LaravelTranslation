@@ -83,6 +83,7 @@ class AssetsTranslateController extends CoreTranslateController
             'type'      => $request->type,
             'where'     => $request->where,
             'status'    => $request->status ? 1 : 0,
+            'sort'      => $request->sort,
         ]);
 
         return redirect()->route(config('laravel-translation.assets_index'))->with('message',[
@@ -118,6 +119,7 @@ class AssetsTranslateController extends CoreTranslateController
             'type'      => $request->type,
             'where'     => $request->where,
             'status'    => $request->status ? 1 : 0,
+            'sort'      => $request->sort,
         ]);
 
         return redirect()->route(config('laravel-translation.assets_index'))->with('message',[

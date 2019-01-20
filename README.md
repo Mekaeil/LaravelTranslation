@@ -79,7 +79,6 @@ translation($text,$lang,$where)
 ```
 _trans($text,$lang,$where)
 ```
-
 * $lang and $where are optional. ( Default $lang set base your locale project )
 * $where can be one of the 'file' or 'db' ( Default is 'file')
  
@@ -117,6 +116,66 @@ you should be use **{!! !!}** like this:
 ```
 {!! _trans('welcome','en','db') !!}
 ```
+
+<br>
+<br>
+
+```
+{{ getLocale() }}
+```
+
+Language locale and Direction saving in cookie or session,
+but if you want to getLocale you can use this method in your blade.
+
+* first argument : $user [ if you want to get user local ]
+* second argument : [ lang , dir ] if you don't set anything return language data with json format.
+``` 
+{{ getLocale(null,'lang') }} // output : en
+```
+Get direction 
+``` 
+{{ getLocale(null,'dir') }} // output : ltr
+```
+Get User Locale
+``` 
+{{ getLocale(\Auth::user()) }}
+/// output:
+{
+    "id": 1,
+    "name": "en",
+    "display_name": "English",
+    "status": 1,
+    "default": 0,
+    "created_at": "2019-01-03 08:40:32",
+    "updated_at": "2019-01-17 11:00:50",
+    "direction": "ltr"
+}
+```
+And an other way to get user locale
+```
+{{ getLocale() }}
+
+/// output :
+{
+    "id": 1,
+    "name": "en",
+    "display_name": "English",
+    "status": 1,
+    "default": 0,
+    "created_at": "2019-01-03 08:40:32",
+    "updated_at": "2019-01-17 11:00:50",
+    "direction": "ltr"
+}
+```
+**IMPORTANT**
+<br>
+
+if you want to use **getLocale()** don't pass any 
+argument because if the user logged in his/her account return user's language 
+otherwise returns the default language in your project. 
+
+
+
 
 #### Create your own helper function in Blade theme
 
@@ -210,6 +269,74 @@ Set the user's language with id:27 to the language with id:3 and use session for
 Translation::setUserLocale(27,3,'session')
 ```
 
+#### Clear Cache
+It's important before anything set config file, in laravel-translation config file you 
+can set type of save user data in browser on **Cookie** or **Session**.
+
+Clear Cache An Item In Session
+``` 
+Translation::clearCache('language','session');
+```
+
+Clear Cache An Array In Session
+``` 
+Translation::clearCache(['language','direction'],'session');
+```
+<br>
+
+**If you set the storage save data, it doesn't need to pass second argument.** 
+<br>
+
+Clear Cache An Item
+``` 
+Translation::clearCache('language');
+```
+Clear Cache An Array
+``` 
+Translation::clearCache(['language','direction']);
+```
+Clear all of the **SESSION** exists in user's browser
+``` 
+Translation::clearCache('all','session');
+```
+
+#### ASSETS
+Ger Assets function
+* $where : default = front-end [ front-end, back-end]
+* $type  : default = null [link_style,styleـcustom,link_script,scriptـcustom]
+* $lang    : default = null, use default locale [en,fa]
+``` 
+Translation::getAssets($where, $type, $lang)
+```
+
+Get all of the assets added for Front-End
+``` 
+Translation::getAssets($where='front-end')
+```
+
+##### GET ASSET DEFINED IN COOKIE
+Get and save style defined for language in blade
+``` 
+    @php
+        setAssets();
+        $asset =\Cookie::get('assets');
+        $asset =json_decode($asset);
+    @endphp
+
+    @if($asset)
+        ///// create style and script tags
+        {!! $asset->link_style ?? '' !!}
+        {!! $asset->link_script ?? '' !!}
+    @endif
+```
+**IMPORTANT**
+
+In setAssets() method, first search cookie with assets key, if find it 
+we don't need execute query, but if you want to update and change cookie, pass second argument with TRUE.
+``` 
+setAssets('front-end',true);
+```
+when the user wants to change his language, this cookie will update.
 
 # Overwrite **trans()** method
     

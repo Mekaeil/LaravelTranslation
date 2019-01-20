@@ -3,6 +3,10 @@
 namespace Mekaeil\LaravelTranslation\TransHelper;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
+use Mekaeil\LaravelTranslation\Repository\Contracts\AssetRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\BaseRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\FlagRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\UserRepositoryInterface;
@@ -10,25 +14,165 @@ use Mekaeil\LaravelTranslation\Repository\Contracts\UserRepositoryInterface;
 class TransHelper
 {
 
-    private function appLangRegister(){
+    private function appLangRegister()
+    {
         return app(FlagRepositoryInterface::class);
     }
 
-    private function appBaseWordRegister(){
+
+    private function appBaseWordRegister()
+    {
         return app(BaseRepositoryInterface::class);
     }
 
-    private function appUserRegister(){
+
+    private function appAssetRegister()
+    {
+        return app(AssetRepositoryInterface::class);
+    }
+
+
+    private function appUserRegister()
+    {
         return app(UserRepositoryInterface::class);
+    }
+
+
+    /**
+     * @param int|null $days
+     * @return \Illuminate\Config\Repository|int|mixed
+     */
+    private function calcCookieTime(int $days=null)
+    {
+        if (!$days)
+        {
+            $days = config('laravel-translation.cookie_expire_time') ?? 90;
+        }
+
+        return $days * ( 24 * 60 );
+    }
+
+
+    /**
+     * @param $cookieName
+     * @param $cookieValue
+     * @param $cookieTime
+     * @param null $path
+     */
+    private function setCookie($cookieName , $cookieValue , $cookieTime , $path=null)
+    {
+        Cookie::queue(
+            $cookieName , $cookieValue , $cookieTime , $path
+        );
+        return true;
+    }
+
+
+    /**
+     * @param $cookieName
+     * @param string $path
+     */
+    private function deleteCookie($cookieName , $path='/')
+    {
+
+        if (is_array($cookieName))
+        {
+            foreach ($cookieName as $key => $value)
+            {
+                if(Request::hasCookie($value)){
+                    $this->deleteCookie($value);
+                }
+            }
+            return true;
+        }
+
+        Cookie::queue(
+            $cookieName , '' , -1 , $path
+        );
+        return true;
+
+    }
+
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    private function deleteSession($key)
+    {
+
+        if (is_array($key))
+        {
+            foreach ($key as $item)
+            {
+                $this->deleteSession($item);
+            }
+
+            return true;
+        }
+
+        if ($key=='all')
+        {
+            Session::flush();
+            return true;
+        }
+
+        Session::forget($key);
+        return true;
+
+    }
+
+
+    /**
+     * @param $type
+     * @param $source
+     * @param string $path_type
+     * @return string
+     */
+    private function assetTagLinkGeneration($type, $source, $path_type='asset')
+    {
+
+        $length     = strpos(trim($type),'_');
+        $typeTag    = substr(trim($type),0,$length);
+        $hrefLink   = substr(trim($type), 0 , $length) == 'link' ? $path_type($source) : '';
+        $tag        = '<' . $typeTag;
+
+        switch ($type)
+        {
+            case 'link_style':
+                $tag   .= '  href="' . $hrefLink  . '" rel="stylesheet">';
+                break;
+
+            case 'link_script':
+                $tag   .= '  src="' . $hrefLink . '">';
+                break;
+
+            default:
+                $tag   .= '>';
+                $tag   .= $source;
+                break;
+        }
+
+        return $tag   .= "</$typeTag>";
+
     }
 
     /**
      * @return mixed
      */
-    public function allLangs()
+    public function allLangs($active=true)
     {
-        return $this->appLangRegister()->all([],[],null,['status' => true]);
+        $condition = array();
+        if ($active)
+        {
+            $condition = array_merge($condition,[
+                'status' => true
+            ]);
+        }
+
+        return $this->appLangRegister()->all([],[],null,$condition);
     }
+
 
     /**
      * @return mixed
@@ -49,6 +193,7 @@ class TransHelper
         ],true);
 
     }
+
 
     /**
      * @param null $lang
@@ -104,6 +249,7 @@ class TransHelper
 
     }
 
+
     /**
      * @param $key
      * @param null $lang
@@ -153,11 +299,166 @@ class TransHelper
        return $this->translation($key,$lang,$where);
     }
 
-    public function getUserLocale()
+
+    /**
+     * @param string $where
+     * @param null $type
+     * @param null $lang
+     * @return bool|null
+     */
+    public function getAssets($where='front-end', $type=null, $lang=null)
     {
+
+        $condition  = array();
+        $lang_id    = null;
+
+        $styles     = array();
+        $scripts    = array();
+
+        if ($where && !in_array($where, array_keys($this->appAssetRegister()->getPositionStyle())))
+        {
+            return null;
+        }
+
+        if ($type && !in_array($type, array_keys($this->appAssetRegister()->getAssetTypes())))
+        {
+            return null;
+        }
+
+
+        /// GET LANGUAGE FOR FIND LANGUAGE'S ASSETS
+        ////////////////////////////////////////////////////////////////////
+        if ($lang)
+        {
+            $lang_id = $this->appLangRegister()->getRecord([
+                'name'  => $lang,
+            ]);
+        }
+        $lang_id = optional($lang_id)->id ?? $this->getUserLocale()->id;
+
+        $condition = array_merge($condition,[
+            'lang_id'    => $lang_id,
+        ]);
+        ////////////////////////////////////////////////////////////////////
+
+        $assets = $this->appAssetRegister()->all([], [], null, $condition);
+
+        //// WHEN TYPE IS NULL, RETURN ALL TYPE OF ASSETS
+        ////////////////////////////////////////////////////////////////////
+        if ($type)
+        {
+            $condition = array_merge($condition,[
+                'type'    => $type,
+            ]);
+        }
+        ////////////////////////////////////////////////////////////////////
+
+        $condition = array_merge($condition,[
+            'where'    => $where,
+        ]);
+
+        $assets = $this->appAssetRegister()->all([], [], null, $condition);
+
+
+        /// GENERATE LINK
+        ////////////////////////////////////////////////////////////////////
+        foreach ($assets as $asset)
+        {
+            $assetTags[$asset->type] = $this->assetTagLinkGeneration($asset->type,$asset->source,$asset->path_type);
+        }
+
+        if(Request::hasCookie('assets')){
+            $this->deleteCookie('assets');
+        }
+
+        $this->setCookie('assets', json_encode($assetTags), $this->calcCookieTime());
+
+        return true;
+    }
+
+
+    /**
+     * @param string $where
+     * @param bool $update
+     * @param null $type
+     * @param null $lang
+     * @return bool
+     */
+    public function setAssets($where='front-end', $update=false, $type=null, $lang=null)
+    {
+
+        if(Request::hasCookie('assets'))
+        {
+            if ($update){
+                return $this->getAssets($where, $type, $lang);
+            }
+            return true;
+        }
+
+        return $this->getAssets($where, $type, $lang);
 
     }
 
+
+    /**
+     * @param null $user
+     * @param null $param
+     * @return mixed
+     */
+    public function getUserLocale($user=null, $param=null)
+    {
+
+        $user = $user ?? \Auth::user();
+
+
+        if ($user && !$user->lang_id)
+        {
+            $getLanguage = $this->defaultLang();
+
+            $this->appUserRegister()->update($user->id,
+            [
+                'lang_id'   => $getLanguage->id,
+            ]);
+
+        }
+        elseif($user)
+        {
+
+            $getLanguage = $this->appLangRegister()->find($user->lang_id);
+
+        }
+        else
+        {
+            $getLanguage = $this->defaultLang();
+        }
+
+        /// IF PARAM EXIST
+        ////////////////////////////////////////////////////////
+        if ($param){
+
+            switch ($param){
+                case 'lang':
+                    return $getLanguage->name;
+                    break;
+                case 'dir':
+                    return $getLanguage->direction;
+                    break;
+            }
+
+        }
+
+
+        return $getLanguage;
+
+    }
+
+
+    /**
+     * @param int $userID
+     * @param int|null $langID
+     * @param string|null $langWith
+     * @return bool
+     */
     public function setUserLocale(int $userID, int $langID=null, string $langWith=null)
     {
         $langWith = $langWith ?? config('laravel-translation.save_language_with');
@@ -183,39 +484,62 @@ class TransHelper
 
         }
         else{
+
+            /// SKIP THE NON-OBJECT ERROR ;) :D
+            ////////////////////////////////////////////////////////
+            if (!$user->lang_id){
+                $this->appUserRegister()->update($user->id,[
+                    'lang_id'   => $this->defaultLang()->id
+                ]);
+            }
+
             $language = $this->appLangRegister()->find($user->lang_id);
         }
 
         /////////////////////////////////////////////////////////////////
 
-
         if ($langWith == 'cookie')
         {
-            cookie('language', $language->name, $this->calcCookieTime());
-            cookie('direction',$language->direction, $this->calcCookieTime());
+            $this->setCookie( 'language' ,$language->name ,$this->calcCookieTime() );
+            $this->setCookie( 'direction' ,$language->direction ,$this->calcCookieTime() );
+            $this->getAssets();
+
             App::setLocale($language->name);
             return true;
         }
 
-        session('language', $language->name);
-        session('direction', $language->direction);
+        session([
+            'language' => $language->name,
+            'direction'=> $language->direction
+        ]);
+
+        /// use cookie for assets
+        ///////////////////////////
+        $this->getAssets();
+
         App::setLocale($language->name);
         return true;
     }
 
-    public function clearCacheLocale(int $userID)
-    {
-        $clearCacheIn = config('laravel-translation.save_language_with');
-    }
 
-    private function calcCookieTime(int $days=null)
+    /**
+     * @param $parameters
+     * @return bool
+     */
+    public function clearCache($parameters, $where=null)
     {
-        if (!$days)
+
+        $clearCacheIn = $where ?? config('laravel-translation.save_language_with');
+
+        if ($clearCacheIn == 'cookie')
         {
-            $days = config('laravel-translation.cookie_expire_time') ?? 90;
+            $this->deleteCookie($parameters);
+            return true;
         }
 
-        return $days * ( 24 * 60 );
+        $this->deleteSession($parameters);
+        return true;
+
     }
 
 

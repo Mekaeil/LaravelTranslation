@@ -20,10 +20,10 @@ class CreateLanguageStyleTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('lang_id')->index();
             $table->enum('type',[
-                'css_link',
-                'custom_css',
-                'script_link',
-                'custom_script',
+                'link_style',
+                'style_custom',
+                'link_script',
+                'script_custom',
             ]);
             $table->text('source');
             $table->enum('where',[
@@ -31,6 +31,7 @@ class CreateLanguageStyleTable extends Migration
                 'back-end',
             ]);
             $table->boolean('status')->default(true);
+            $table->unsignedInteger('sort')->default(1);
             $table->timestamps();
 
             /// CREATE RELATION FOREIGN KEY
