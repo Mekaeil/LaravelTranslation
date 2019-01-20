@@ -329,7 +329,14 @@ Get and save style defined for language in blade
         {!! $asset->link_script ?? '' !!}
     @endif
 ```
+**IMPORTANT**
 
+In setAssets() method, first search cookie with assets key, if find it 
+we don't need execute query, but if you want to update and change cookie, pass second argument with TRUE.
+``` 
+setAssets('front-end',true);
+```
+when the user wants to change his language, this cookie will update.
 
 # Overwrite **trans()** method
     

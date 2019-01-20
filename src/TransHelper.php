@@ -367,6 +367,10 @@ class TransHelper
             $assetTags[$asset->type] = $this->assetTagLinkGeneration($asset->type,$asset->source,$asset->path_type);
         }
 
+        if(Request::hasCookie('assets')){
+            $this->deleteCookie('assets');
+        }
+
         $this->setCookie('assets', json_encode($assetTags), $this->calcCookieTime());
 
         return true;
