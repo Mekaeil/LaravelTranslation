@@ -42,8 +42,13 @@ class AddLangIdColUsersTable extends Migration
     public function down()
     {
         $table          = config('laravel-translation.users_table');
+        $foreign        = $table . '_' .'lang_id' . "_foreign";
 
         if ($table){
+            Schema::table($table, function (Blueprint $table) use ($foreign){
+                $table->dropForeign($foreign);
+            });
+
             Schema::table($table, function (Blueprint $table){
                 $table->dropColumn('lang_id');
             });

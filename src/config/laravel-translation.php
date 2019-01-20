@@ -15,6 +15,8 @@ return [
         'user_model'        => \App\User::class,
         'users_id_table'    => 'id',
 
+        'admin_panel_url'   => '/admin',
+
 
     /*
     |--------------------------------------------------------------------------
@@ -23,6 +25,7 @@ return [
     |
     |
     */
+
         'base_word_index'   => 'admin.trans.base.index',
         'languages_index'   => 'admin.trans.lang.index',
         'modules_index'     => 'admin.trans.module.index',

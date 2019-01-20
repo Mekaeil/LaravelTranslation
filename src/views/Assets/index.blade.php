@@ -73,7 +73,7 @@
             {{-- RESULT TABLE --}}
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Base Words List</h2>
+                    <h2>Assets List</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
@@ -85,6 +85,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Sort</th>
                                 <th>Language</th>
                                 <th>Type</th>
                                 <th>Used In</th>
@@ -97,6 +98,7 @@
                             @foreach($assets as $asset)
                                 <tr>
                                     <th scope="row">{{ $loop->iteration }}</th>
+                                    <td>{{ $asset->sort }}</td>
                                     <td>{{ $asset->lang_id }}</td>
                                     <td>{{ $asset->type }}</td>
                                     <td>{{ $asset->where }}</td>

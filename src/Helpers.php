@@ -40,4 +40,37 @@ if (!function_exists('_trans'))
 
 }
 
+if (!function_exists('getLocale'))
+{
+
+    /**
+     * @param $user [ USER MODEL ]
+     * @param $param [ 'lang','dir', null ]
+     * @return mixed
+     */
+
+    function getLocale($user=null,$param=null)
+    {
+        return Translation::getUserLocale($user,$param);
+    }
+
+}
+
+
+if (!function_exists('setAssets'))
+{
+
+    /**
+     * @param string $where
+     * @param null $type
+     * @param null $lang
+     * @return mixed
+     */
+
+    function setAssets($where='front-end', $update=false, $type=null, $lang=null)
+    {
+        return Translation::setAssets($where, $update, $type, $lang);
+    }
+
+}
 
