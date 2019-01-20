@@ -1,6 +1,6 @@
 <?php
 
-namespace Mekaeil\LaravelTranslation\src\database\seeds\Base;
+namespace Mekaeil\LaravelTranslation\database\seeds\Base;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
