@@ -502,6 +502,8 @@ class TransHelper
         {
             $this->setCookie( 'language' ,$language->name ,$this->calcCookieTime() );
             $this->setCookie( 'direction' ,$language->direction ,$this->calcCookieTime() );
+            $this->getAssets();
+
             App::setLocale($language->name);
             return true;
         }
@@ -510,6 +512,11 @@ class TransHelper
             'language' => $language->name,
             'direction'=> $language->direction
         ]);
+
+        /// use cookie for assets
+        ///////////////////////////
+        $this->getAssets();
+
         App::setLocale($language->name);
         return true;
     }
