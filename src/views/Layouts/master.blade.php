@@ -24,8 +24,10 @@
         <!-- footer content -->
         <footer class="hidden-print">
             <div class="pull-right">
-                Copyright 2018
+                Copyright 2018 - MIT License | <a href="https://packagist.org/packages/mekaeil/laravel-translation" target="_blank">Laravel Translation</a> Package developed by
+                <a href="http://mekaeil.me" target="_blank">Mekaeil</a>
             </div>
+
             <div class="clearfix"></div>
         </footer>
         <!-- /footer content -->

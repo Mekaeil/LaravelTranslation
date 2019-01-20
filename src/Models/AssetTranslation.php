@@ -21,6 +21,7 @@ class AssetTranslation extends Model
         'where',        // front-end, back-end
         'status',       // true, false
         'path_type',    // app_path, resource_path, asset, url
+        'sort',
     ];
 
 

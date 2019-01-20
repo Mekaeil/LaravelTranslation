@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <p>hereeeeee</p>
+    <p>here</p>
 @endsection
 
 

@@ -97,6 +97,18 @@
                         </div>
 
                         <div class="row">
+                            @include('LaraTrans::Layouts.text-field',[
+                                'name'              => 'sort',
+                                'type'              => 'number',
+                                'value'             => old('sort'),
+                                'placeHolder'       => 'priority ,...',
+                                'required'          => 'true',
+                                'parentInputClass'  => 'col-md-6',
+                                'label'      => [
+                                    'value'  => 'Sort',
+                                ],
+                            ])
+
                             @include('LaraTrans::Layouts.select-field',[
                                 'label' => [
                                     'value' => "Where we use it?!",

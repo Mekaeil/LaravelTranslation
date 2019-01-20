@@ -2,8 +2,9 @@
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
             <a href="#" class="site_title">
-                <img src="{{ asset('images/logo.png') }}" class="img-circle logo-side" alt="">
-                <span>{{ config('admin.site.title') }}</span>
+                Laravel Translation
+                {{--<img src="{{ asset('images/logo.png') }}" class="img-circle logo-side" alt="">--}}
+                {{--<span>{{ config('admin.site.title') }}</span>--}}
             </a>
         </div>
 
@@ -11,12 +12,12 @@
 
         <!-- menu profile quick info -->
         <div class="profile clearfix">
-            <div class="profile_pic">
-                <img src="{{ asset('images/icon/3.svg') }}" alt="" class="img-circle profile_img">
-            </div>
+            {{--<div class="profile_pic">--}}
+                {{--<img src="{{ asset('images/icon/3.svg') }}" alt="" class="img-circle profile_img">--}}
+            {{--</div>--}}
             <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>Mekaeil Andisheh</h2>
+                {{--<h2>Mekaeil Andisheh</h2>--}}
             </div>
         </div>
         <!-- /menu profile quick info -->
@@ -28,6 +29,12 @@
             <div class="menu_section">
                 <ul class="nav side-menu">
                     <li class="dropdown-submenu">
+                        <a class="accLink" href="{{ url(config('laravel-translation.admin_panel_url')) }}">
+                            <i class="fa fa-home"></i>
+                            Admin Panel
+                        </a>
+                    </li>
+                    <li class="dropdown-submenu">
                         <a class="accLink" href="#">
                             <i class="fa fa-language"></i>
                             Translation
@@ -35,16 +42,16 @@
 
                         <ul class="nav child_menu">
                             <li>
-                                <a href="{{ route('admin.trans.lang.index') }}">Languages</a>
+                                <a href="{{ route(config('laravel-translation.languages_index')) }}">Languages</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.trans.base.index') }}">Base Translation</a>
+                                <a href="{{ route(config('laravel-translation.base_word_index')) }}">Base Translation</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.trans.module.index') }}">Module Translation</a>
+                                <a href="{{ route(config('laravel-translation.modules_index')) }}">Module Translation</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.trans.assets.index') }}">Assets Translation</a>
+                                <a href="{{ route(config('laravel-translation.assets_index')) }}">Assets Translation</a>
                             </li>
                         </ul>
                     </li>
