@@ -1,6 +1,6 @@
 <?php
 
-namespace database\seeds\laravelTranslation;
+//namespace database\seeds\laravelTranslation;
 
 
 use Mekaeil\LaravelTranslation\database\seeds\Flag\MasterFlagTranslation;
