@@ -1,6 +1,6 @@
 # Laravel-translation
 
-[![Latest Version](https://img.shields.io/badge/version-1.2-brightgreen.svg?style=flat)](https://github.com/Mekaeil/Laravel-translation/releases)
+[![Latest Version](https://img.shields.io/badge/version-1.3-blue.svg?style=flat)](https://github.com/Mekaeil/Laravel-translation/releases)
 [![Build](https://img.shields.io/badge/build-in%20progress-blue.svg?style=flat)](https://github.com/Mekaeil/Laravel-translation)
 [![Admin Panel Template](https://img.shields.io/badge/Admin%20Panel-Gentelella-yellowgreen.svg?style=flat)](https://github.com/puikinsh/gentelella)
 
