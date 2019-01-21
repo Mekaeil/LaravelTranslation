@@ -32,7 +32,9 @@ class FlagTranslateController extends CoreTranslateController
 
     public function create()
     {
-        return view('LaraTrans::Languages.create');
+        $direction = $this->flagRepository->getDirection();
+
+        return view('LaraTrans::Languages.create', compact('direction'));
     }
 
     public function store(StoreLanguage $request)
@@ -42,6 +44,7 @@ class FlagTranslateController extends CoreTranslateController
             'name'          => $request->name,
             'display_name'  => $request->display_name,
             'status'        => isset($request->status) ? true : false,
+            'direction'     => $request->direction,
             'default'       => false,
         ]);
 
@@ -54,7 +57,9 @@ class FlagTranslateController extends CoreTranslateController
 
     public function edit(FlagTranslation $lang)
     {
-        return view('LaraTrans::Languages.edit', compact('lang'));
+        $direction = $this->flagRepository->getDirection();
+
+        return view('LaraTrans::Languages.edit', compact('lang','direction'));
     }
 
     public function update(UpdateLanguage $request ,FlagTranslation $lang)
@@ -62,6 +67,7 @@ class FlagTranslateController extends CoreTranslateController
 
         $this->flagRepository->update($lang->id,[
             'display_name'  => $request->display_name,
+            'direction'     => $request->direction,
             'status'        => $request->status ? true : false,
         ]);
 

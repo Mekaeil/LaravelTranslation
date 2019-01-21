@@ -1,7 +1,7 @@
 # Laravel-translation
 
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-1.0.1-blue.svg?style=flat)](https://github.com/Mekaeil/Laravel-translation/releases)
-[![Build](https://img.shields.io/badge/build-passing-green.svg?style=flat)](https://github.com/Mekaeil/Laravel-translation)
+[![Latest Version](https://img.shields.io/badge/version-1.2-brightgreen.svg?style=flat)](https://github.com/Mekaeil/Laravel-translation/releases)
+[![Build](https://img.shields.io/badge/build-in%20progress-blue.svg?style=flat)](https://github.com/Mekaeil/Laravel-translation)
 [![Admin Panel Template](https://img.shields.io/badge/Admin%20Panel-Gentelella-yellowgreen.svg?style=flat)](https://github.com/puikinsh/gentelella)
 
 
@@ -59,14 +59,8 @@ UserLocale::class,
 ```
 
 ### SEEDS [ step : 4 ]
-Creating requirement and sample data in your database. It's important before seeding migrate your project.
 
-When run publishing files, you can add and change seeder file in this path <br>
-<span style="background:#95a5a6;color:#000;padding:0.2em;display:inline-block;">**database > seeds >laravelTranslation**
-    
-```
-php artisan db:seed --class=Mekaeil\\LaravelTranslation\\database\\seeds\\LaravelTranslationSeeder
-```
+.... comming ....
     
     
 # MAIN URLS / ROUTES

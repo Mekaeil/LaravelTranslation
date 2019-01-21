@@ -26,7 +26,8 @@ class UpdateLanguage extends FormRequest
         return [
             'display_name'  => 'required',
             'status'        => 'nullable',
-          //  'default'       => 'nullable',
+            'direction'     => 'required|in:ltr,rtl',
+            //  'default'       => 'nullable',
         ];
     }
 }

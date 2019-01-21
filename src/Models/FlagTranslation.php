@@ -21,6 +21,7 @@ class FlagTranslation extends Model
         'display_name',     // name of language for display
         'status',           // boolean ( default = true )
         'default',          // boolean ( default = false )
+        'direction',        // rtl, ltr ( default = ltr )
     ];
 
     public function assets(){
