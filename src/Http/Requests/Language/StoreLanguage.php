@@ -29,6 +29,7 @@ class StoreLanguage extends FormRequest
             'name'          => 'required|min:2|unique:'. $table,
             'display_name'  => 'required',
             'status'        => 'nullable',
+            'direction'     => 'required|in:ltr,rtl',
             //'default'       => 'nullable',
         ];
     }
