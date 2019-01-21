@@ -40,7 +40,7 @@ if (!function_exists('_trans'))
 
 }
 
-if (!function_exists('getLocale'))
+if (!function_exists('getUserLocale'))
 {
 
     /**
@@ -49,7 +49,7 @@ if (!function_exists('getLocale'))
      * @return mixed
      */
 
-    function getLocale($user=null,$param=null)
+    function getUserLocale($user=null,$param=null)
     {
         return Translation::getUserLocale($user,$param);
     }

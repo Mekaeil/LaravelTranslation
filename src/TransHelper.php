@@ -124,6 +124,22 @@ class TransHelper
 
 
     /**
+     * @param $lang [ fa , en , ... ] locale
+     * @param $dir [ rtl, ltr ]
+     * @param string $where [ front-end , back-end ]
+     * @return bool
+     */
+    private function setAllCookieData($lang, $dir, $where="front-end")
+    {
+        $this->getAssets($where, null, $lang);
+        $this->setCookie( 'language' ,$lang ,$this->calcCookieTime() );
+        $this->setCookie( 'direction' ,$dir ,$this->calcCookieTime() );
+
+        return true;
+    }
+
+
+    /**
      * @param $type
      * @param $source
      * @param string $path_type
@@ -160,8 +176,9 @@ class TransHelper
     /**
      * @return mixed
      */
-    public function allLangs($active=true)
+    public function allLangs($active=true,$pluck=false)
     {
+
         $condition = array();
         if ($active)
         {
@@ -170,7 +187,13 @@ class TransHelper
             ]);
         }
 
+        if ($pluck)
+        {
+            return $this->appLangRegister()->pluckData('display_name','name',true,$condition);
+        }
+
         return $this->appLangRegister()->all([],[],null,$condition);
+
     }
 
 
@@ -301,10 +324,10 @@ class TransHelper
 
 
     /**
-     * @param string $where
-     * @param null $type
-     * @param null $lang
-     * @return bool|null
+     * @param string $where [ front-end , back-end ]
+     * @param null $type    [ link_style, style_custom, link_script, script_custom]
+     * @param null $lang    [ fa , en , ... ]
+     * @return bool|null    []
      */
     public function getAssets($where='front-end', $type=null, $lang=null)
     {
@@ -334,7 +357,7 @@ class TransHelper
                 'name'  => $lang,
             ]);
         }
-        $lang_id = optional($lang_id)->id ?? $this->getUserLocale()->id;
+        $lang_id = $lang_id ? $lang_id->id : $this->getUserLocale()->id;
 
         $condition = array_merge($condition,[
             'lang_id'    => $lang_id,
@@ -359,11 +382,10 @@ class TransHelper
 
         $assets = $this->appAssetRegister()->all([], [], null, $condition);
 
-
         /// GENERATE LINK
         ////////////////////////////////////////////////////////////////////
 
-        if ($assets)
+        if ($assets && !Request::hasCookie('assets'))
         {
             foreach ($assets as $asset)
             {
@@ -376,14 +398,11 @@ class TransHelper
                 }
             }
 
-            if(Request::hasCookie('assets')){
-                $this->deleteCookie('assets');
-            }
-
             if (isset($assetTags))
             {
                 $this->setCookie('assets', json_encode($assetTags), $this->calcCookieTime());
             }
+//            dd(Request::hasCookie('assets'));
 
         }
 
@@ -394,22 +413,24 @@ class TransHelper
     /**
      * @param string $where
      * @param bool $update
-     * @param null $type
+     * @param null $type [ link_style, style_custom, link_script, script_custom]
      * @param null $lang
      * @return bool
      */
     public function setAssets($where='front-end', $update=false, $type=null, $lang=null)
     {
 
-        if(Request::hasCookie('assets'))
+        if ($update)
         {
-            if ($update){
-                return $this->getAssets($where, $type, $lang);
-            }
-            return true;
+            $this->clearCache('assets');
         }
 
-        return $this->getAssets($where, $type, $lang);
+        if (!Request::hasCookie('assets'))
+        {
+            return $this->getAssets($where, $type, $lang);
+        }
+
+        return true;
 
     }
 
@@ -423,7 +444,6 @@ class TransHelper
     {
 
         $user = $user ?? \Auth::user();
-
 
         if ($user && !$user->lang_id)
         {
@@ -467,20 +487,33 @@ class TransHelper
     }
 
 
+    public function getTransLocale(string $langWith=null)
+    {
+        $langWith = $langWith ?? config('laravel-translation.save_language_with');
+
+        if ($langWith == 'cookie')
+        {
+            return Cookie::get('language');
+        }
+
+        return Session::get('language');
+    }
+
     /**
      * @param int $userID
      * @param int|null $langID
      * @param string|null $langWith
      * @return bool
      */
-    public function setUserLocale(int $userID, int $langID=null, string $langWith=null)
+    public function setUserLocale(int $userID=null, int $langID=null, string $langWith=null)
     {
         $langWith = $langWith ?? config('laravel-translation.save_language_with');
-        $user     = $this->appUserRegister()->find($userID);
+        $user     = isset($userID) ? $this->appUserRegister()->find($userID) : \Auth::user() ;
 
-        if (!$user && ($user->lang_id || !$langID) )
+        if (!$user)
         {
-            return false;
+            $language = $langID ? $this->appLangRegister()->find($langID) : $this->defaultLang();
+            return $this->setAllCookieData($language->name,$language->direction);
         }
 
         /// GET LANGUAGE
@@ -514,12 +547,8 @@ class TransHelper
 
         if ($langWith == 'cookie')
         {
-            $this->getAssets();
-            $this->setCookie( 'language' ,$language->name ,$this->calcCookieTime() );
-            $this->setCookie( 'direction' ,$language->direction ,$this->calcCookieTime() );
-
+            $this->setAllCookieData($language->name,$language->direction);
             return App::setLocale($language->name);
-
         }
 
         session([
@@ -529,7 +558,7 @@ class TransHelper
 
         /// use cookie for assets
         ///////////////////////////
-        $this->getAssets();
+        $this->getAssets('front-end',null, $language->name);
 
         return App::setLocale($language->name);
     }
@@ -546,12 +575,10 @@ class TransHelper
 
         if ($clearCacheIn == 'cookie')
         {
-            $this->deleteCookie($parameters);
-            return true;
+            return $this->deleteCookie($parameters);
         }
 
-        $this->deleteSession($parameters);
-        return true;
+        return $this->deleteSession($parameters);
 
     }
 
