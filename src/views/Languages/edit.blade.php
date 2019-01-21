@@ -62,6 +62,22 @@
                             ],
                         ])
 
+                        @include('LaraTrans::Layouts.select-field',[
+                            'label' => [
+                                'value' => "Select Direction",
+                            ],
+
+                            'name'              => 'direction',
+                            'id'                => 'direction',
+                            'placeholderSelect' => 'Select Direction',
+                            'class'             => 'form-control',
+                            'parentInputClass'  => 'col-md-4',
+                            'labelClass'        => 'col-md-12',
+                            'list'              => $direction,
+                            'selected'          => $lang->direction,
+                            'load'              => 'true',
+                        ])
+
                         @include('LaraTrans::Layouts.switch',[
                             'load'          => 'true',
                             'parentClass'   => 'form-group',

@@ -52,6 +52,7 @@
                                 <th>Display Name</th>
                                 <th>Status</th>
                                 <th>Default</th>
+                                <th>Direction</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -63,6 +64,7 @@
                                     <td>{{ $language->display_name }}</td>
                                     <td>{{ $language->status ? 'Active' : 'Deactive' }}</td>
                                     <td>{{ $language->default ? 'Default' : '--' }}</td>
+                                    <td>{{ $language->direction }}</td>
                                     <td>
                                         @include('LaraTrans::Layouts.modal',[
                                             'title'     => 'Set Language As Default',

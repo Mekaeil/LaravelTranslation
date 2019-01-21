@@ -12,4 +12,12 @@ class FlagEloquent extends CoreEloquents implements FlagRepositoryInterface
 
     protected $model = FlagTranslation::class;
 
+    public function getDirection()
+    {
+        return [
+            'rtl'   => 'Right To Left',
+            'ltr'   => 'Left To Right',
+        ];
+    }
+
 }
