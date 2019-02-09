@@ -133,11 +133,18 @@ class FlagTranslateController extends CoreTranslateController
             if ($userID && $user=$this->userRepository->find($userID))
             {
                 Translation::setUserLocale($userID,$getLanguage->id);
+
                 return response()->json("Switch Language to $getLanguage->display_name for user with id=$userID ");
             }
 
             Translation::setUserLocale(null,$getLanguage->id);
-            return response()->json("Switch language to $getLanguage->display_name");
+
+//            return redirect()->to(Translation::uri(Translation::getUrlBaseLocale($getLanguage->name)));
+
+            return response()->json([
+                'url'       => Translation::uri(Translation::getUrlBaseLocale($langName)),
+                'message'   => "Switch language to $getLanguage->display_name",
+            ]);
         }
 
         return response()->json('Language not found!!!');

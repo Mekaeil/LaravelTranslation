@@ -37,6 +37,7 @@ class TransHelper
         return app(UserRepositoryInterface::class);
     }
 
+    public $locale;
 
     /**
      * @param int|null $days
@@ -581,6 +582,81 @@ class TransHelper
         return $this->deleteSession($parameters);
 
     }
+
+    public function uri($url=null)
+    {
+
+        if ($url)
+        {
+            if (! \Request::is($url))
+            {
+                $locale       =  app()->getLocale();
+                $urlWithoutLocale   =  str_replace('/'.$locale,'',$url);
+                return $urlWithoutLocale;
+            }
+
+            return 'here';
+        }
+
+        $urlBaseLocale = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". app()->getLocale() ."$_SERVER[REQUEST_URI]";
+
+
+        if (! \Request::is($urlBaseLocale))
+        {
+
+            $locale             = app()->getLocale();
+            $urlBaseLocale      = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $urlWithoutLocale   =  str_replace('/'.$locale,'',$urlBaseLocale);
+
+//            return redirect()->to($urlWithoutLocale);
+            return $urlWithoutLocale;
+        }
+
+        return  $urlBaseLocale;
+//        return redirect()->to($urlBaseLocale);
+    }
+
+
+    public function getUrlBaseLocale($locale)
+    {
+        if ($_SERVER['REQUEST_METHOD']=='POST')
+        {
+            $url = \Session::get('_previous')['url'];
+
+            $target     = parse_url($url, PHP_URL_SCHEME) . "://";
+            $target    .= parse_url($url, PHP_URL_HOST) . ':'. parse_url($url, PHP_URL_PORT) . '/' . $locale ;
+            $target    .= parse_url($url, PHP_URL_PATH);
+            $target    .= parse_url($url, PHP_URL_QUERY) ? '/' . parse_url($url, PHP_URL_QUERY) : '';
+            $target    .= parse_url($url, PHP_URL_FRAGMENT) ? '/' . parse_url($url, PHP_URL_FRAGMENT) : '';
+            return $target;
+        }
+
+
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". app()->getLocale() ."$_SERVER[REQUEST_URI]";
+    }
+
+//
+//    public function uri()
+//    {
+//        $urlBaseLocale = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". $this->locale ."$_SERVER[REQUEST_URI]";
+//
+//        $handle = curl_init($urlBaseLocale);
+//        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+//
+//        /* Get the HTML or whatever is linked in $url. */
+//        $response = curl_exec($handle);
+//
+//        /* Check for 404 (file not found). */
+//        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+//        if($httpCode == 404) {
+//            dd('here');
+//
+//            /* Handle 404 here. */
+//        }
+//        curl_close($handle);
+//
+//        return redirect()->to($urlBaseLocale, 301);
+//    }
 
 
 }
