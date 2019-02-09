@@ -583,39 +583,60 @@ class TransHelper
 
     }
 
-    public function uri($url=null)
+    public function uri($url=null,$newLocale=null,$type=null)
     {
+
+        $locale = app()->getLocale();
 
         if ($url)
         {
             if (! \Request::is($url))
             {
-                $locale       =  app()->getLocale();
+
                 $urlWithoutLocale   =  str_replace('/'.$locale,'',$url);
-                return $urlWithoutLocale;
+
+                if (!$type)
+                {
+                    return $urlWithoutLocale;
+                }
+                return redirect()->to($urlWithoutLocale);
+
             }
 
-            return 'here';
+            $urlWithNewLocale   =  str_replace($locale,$newLocale,$url);
+            if (!$type)
+            {
+                return $urlWithNewLocale;
+            }
+            return redirect()->to($urlWithNewLocale);
+
         }
 
-        $urlBaseLocale = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". app()->getLocale() ."$_SERVER[REQUEST_URI]";
 
+        $urlBaseLocale = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". $locale ."$_SERVER[REQUEST_URI]";
 
         if (! \Request::is($urlBaseLocale))
         {
 
-            $locale             = app()->getLocale();
             $urlBaseLocale      = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             $urlWithoutLocale   =  str_replace('/'.$locale,'',$urlBaseLocale);
 
-//            return redirect()->to($urlWithoutLocale);
-            return $urlWithoutLocale;
+            if (!$type)
+            {
+                return $urlWithoutLocale;
+            }
+            return redirect()->to($urlWithoutLocale);
+
         }
 
-        return  $urlBaseLocale;
-//        return redirect()->to($urlBaseLocale);
-    }
+        $urlBaseLocale   =  str_replace($locale,$newLocale,$urlBaseLocale);
+        if (!$type)
+        {
+            return $urlBaseLocale;
+        }
+        return redirect()->to($urlBaseLocale);
 
+    }
 
     public function getUrlBaseLocale($locale)
     {
@@ -634,30 +655,6 @@ class TransHelper
 
         return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". app()->getLocale() ."$_SERVER[REQUEST_URI]";
     }
-
-//
-//    public function uri()
-//    {
-//        $urlBaseLocale = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". $this->locale ."$_SERVER[REQUEST_URI]";
-//
-//        $handle = curl_init($urlBaseLocale);
-//        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
-//
-//        /* Get the HTML or whatever is linked in $url. */
-//        $response = curl_exec($handle);
-//
-//        /* Check for 404 (file not found). */
-//        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-//        if($httpCode == 404) {
-//            dd('here');
-//
-//            /* Handle 404 here. */
-//        }
-//        curl_close($handle);
-//
-//        return redirect()->to($urlBaseLocale, 301);
-//    }
-
 
 }
 
