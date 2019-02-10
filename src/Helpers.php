@@ -74,3 +74,21 @@ if (!function_exists('setAssets'))
 
 }
 
+if (!function_exists('getLangs'))
+{
+
+    function getLangs()
+    {
+        return  Translation::allLangs(true,true); // get data with pluck
+
+    }
+
+}
+
+if (!function_exists('setUriRoutes'))
+{
+    function setUriRoutes()
+    {
+        return Translation::uri();
+    }
+}

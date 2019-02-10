@@ -37,6 +37,7 @@ class TransHelper
         return app(UserRepositoryInterface::class);
     }
 
+    public $locale;
 
     /**
      * @param int|null $days
@@ -582,6 +583,142 @@ class TransHelper
 
     }
 
+
+    /**
+     * @param null $url
+     * @param null $newLocale
+     * @param null $type
+     * @return \Illuminate\Http\RedirectResponse|mixed|string
+     */
+    function url_exists($url)
+    {
+//        $file_headers = @get_headers($url);
+//        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
+//            return false;
+//        }
+//        else {
+//            return true;
+//        }
+
+        if (!$fp = curl_init($url)) return false;
+        return true;
+    }
+
+    public function uri($url=null, $newLocale=null, $type=null)
+    {
+
+        $locale     = app()->getLocale();
+        $newLocale  = $newLocale ?? $locale;
+
+        if ($url)
+        {
+//            if (! Request::is($url) )
+//            if (! $this->url_exists($url) )
+//            {
+//                $urlWithoutLocale   =  str_replace('/'.$newLocale,'',$url);
+//
+//                if (!$type)
+//                {
+//                    return $urlWithoutLocale;
+//                }
+//                return redirect()->to($urlWithoutLocale);
+//
+//            }
+
+            $urlWithNewLocale   =  str_replace($locale,$newLocale,$url);
+            if (!$type)
+            {
+                return $urlWithNewLocale;
+            }
+            return redirect()->to($urlWithNewLocale);
+
+        }
+
+
+        $urlBaseLocale = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". $locale ."$_SERVER[REQUEST_URI]";
+
+        if (! \Request::is($urlBaseLocale))
+        {
+
+            $urlBaseLocale      = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $urlWithoutLocale   =  str_replace('/'.$locale,'',$urlBaseLocale);
+
+            if (!$type)
+            {
+                return $urlWithoutLocale;
+            }
+            return redirect()->to($urlWithoutLocale);
+
+        }
+
+        $urlBaseLocale   =  str_replace($locale,$newLocale,$urlBaseLocale);
+        if (!$type)
+        {
+            return $urlBaseLocale;
+        }
+        return redirect()->to($urlBaseLocale);
+
+    }
+
+    public function getUrlBaseLocale($locale)
+    {
+        if ($_SERVER['REQUEST_METHOD']=='POST')
+        {
+            $url = \Session::get('_previous')['url'];
+            return $this->getParseUrl($url,$locale);
+        }
+
+        // #mebye need to change #mekaeil #todo
+        // change locale to get locale
+
+        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $locale     = app()->getLocale();
+        return $this->getParseUrl($currentURL,$locale);
+    }
+
+
+    public function getParseUrl($url,$locale)
+    {
+        $currentLocale = app()->getLocale();
+        $ifLocaleExist = strpos($url,$currentLocale);
+
+        $target     = parse_url($url, PHP_URL_SCHEME) . "://";
+        $target    .= parse_url($url, PHP_URL_HOST) . ':'. parse_url($url, PHP_URL_PORT);
+        $target    .= !$ifLocaleExist ? '/' . $currentLocale : '';
+        $target    .= parse_url($url, PHP_URL_PATH);
+        $target    .= parse_url($url, PHP_URL_QUERY) ? '/' . parse_url($url, PHP_URL_QUERY) : '';
+        $target    .= parse_url($url, PHP_URL_FRAGMENT) ? '/' . parse_url($url, PHP_URL_FRAGMENT) : '';
+
+        return  str_replace($currentLocale,$locale,$target);
+    }
+
+
+//    public function setUriRoute($url=null,$newLocale=null)
+//    {
+//
+//        $locale     = app()->getLocale();
+//        $newLocale  = $newLocale ?? $locale;
+//
+//        if ($url)
+//        {
+//            if (! \Request::is($url))
+//            {
+//                return null;
+//            }
+//
+//            return $newLocale;
+//
+//        }
+//
+//        $urlBaseLocale = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". $locale ."$_SERVER[REQUEST_URI]";
+//
+//        if (! \Request::is($urlBaseLocale))
+//        {
+//            return null;
+//        }
+//        return $newLocale;
+//
+//    }
 
 }
 

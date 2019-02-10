@@ -167,5 +167,3 @@
             ->name('lang.switch.language');
 
     });
-
-
