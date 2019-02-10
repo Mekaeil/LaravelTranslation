@@ -57,6 +57,31 @@ use Mekaeil\LaravelTranslation\Http\Middleware\UserLocale;
 -----
 UserLocale::class,
 ```
+Add this Route:<br>
+in this route redirect to base locale.
+``` 
+Route::get('{uri?}', [
+    'uses'      => 'PublicTransController@changeLocale',
+])->where('uri', '.*');
+```
+Create PublicTransController in your path controller and add this function for set redirection.
+``` 
+    public function changeLocale(Request $request)
+    {
+        $locale = \Cookie::get('language') ?? app()->getLocale();
+        $getURL = Translation::getUrlBaseLocale($locale);
+
+        if (! \Request::is($getURL))
+        {
+            $newUrl = str_replace('/'.$locale,'',$getURL);
+            return redirect()->to($newUrl);
+        }
+
+        return Translation::uri($getURL,$locale,'redirect');
+    }
+```
+
+
 
 ### SEEDS [ step : 4 ]
 
@@ -210,43 +235,110 @@ return view('home', compact('langs'));
     $(document).ready(function () {
 
 
-        $('select.switchLang').on('change', function () {
+            // ON CHANGE SELECT
+            $('select.switchLang').on('change', function () {
 
-            var languageID  = $(this).find(":selected").val();
-            var route       = "{{ route(config('laravel-translation.switch_language')) }}";
-            var userID      = "{{ \Auth::user() ? \Auth::user()->id : null }}";
+                var languageID  = $(this).find(":selected").val();
+                var route       = "{{ route(config('laravel-translation.switch_language')) }}";
+                var userID      = "{{ \Auth::user() ? \Auth::user()->id : null }}";
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                var formData = new FormData();
+                formData.append('lang', languageID);
+                formData.append('userID', userID);
+
+                $.ajax({
+                    url           : route,
+                    type          : 'POST',
+                    data          : formData,
+                    contentType   : false,
+                    processData   : false,
+
+                    success: function(data)
+                    {
+                        // console.log(data.url);
+                        console.log('Language changed successfully!');
+                        // location.reload();
+                        window.location.replace(data.url)
+                    },
+                    error: function () {
+                        console.log('Error Response!!!');
+                    }
+                });
+
             });
+            
+            
 
-            var formData = new FormData();
-            formData.append('lang', languageID);
-            formData.append('userID', userID);
+    });
+</script>
+```
+ 
+ Another Style [ button click]
+ ``` 
+ <div class="lang-switch lang-button" style="top: -195px;">
+     @foreach($langs as $key => $value)
+         <span class="{{ $key == \Cookie::get('language') ? 'active' : '' }}" data-key="{{ $key }}">{{ $value }}</span>
+     @endforeach
+ </div>
+ ```
+Ajax :
+``` 
+    // CLICK BUTTON
+    $('.lang-switch > span').on('click', function ()
+    {
+        if($(this).hasClass("active")){
+            return false;
+        }
 
-            $.ajax({
-                url           : route,
-                type          : 'POST',
-                data          : formData,
-                contentType   : false,
-                processData   : false,
+        var languageID  = $(this).data('key');
+        var route       = "{{ route(config('laravel-translation.switch_language')) }}";
+        var userID      = "{{ \Auth::user() ? \Auth::user()->id : null }}";
 
-                success: function(data) {
-                    //console.log(data);
-                    location.reload();
-                    console.log('Language changed successfully!');
-                },
-                error: function () {
-                    console.log('Error Response!!!');
-                }
-            });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var formData = new FormData();
+        formData.append('lang', languageID);
+        formData.append('userID', userID);
+
+        $.ajax({
+            url           : route,
+            type          : 'POST',
+            data          : formData,
+            contentType   : false,
+            processData   : false,
+
+            success: function(data)
+            {
+                console.log(data.url);
+                console.log('Language changed successfully!');
+                window.location.replace(data.url)
+            },
+            error: function () {
+                console.log('Error Response!!!');
+            }
 
         });
 
     });
-</script>
+
 ```
 
 
@@ -410,6 +502,13 @@ Get and save style defined for language in blade
         {!! $asset->link_script ?? '' !!}
     @endif
 ```
+Or add custom style in master blade file. 
+``` 
+@if( \Cookie::get('direction') == 'rtl' )
+    <link rel="stylesheet" href="{{ asset('css/rtl.css') }}">
+@endif
+```
+
 **IMPORTANT**
 
 In setAssets() method, first search cookie with assets key, if find it 
