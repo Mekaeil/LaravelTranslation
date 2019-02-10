@@ -668,11 +668,8 @@ class TransHelper
             return $this->getParseUrl($url,$locale);
         }
 
-        // #mebye need to change #mekaeil #todo
-        // change locale to get locale
-
-        $currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        $locale     = app()->getLocale();
+        $currentURL         = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $currentLocale      = app()->getLocale();
         return $this->getParseUrl($currentURL,$locale);
     }
 
@@ -691,34 +688,7 @@ class TransHelper
 
         return  str_replace($currentLocale,$locale,$target);
     }
-
-
-//    public function setUriRoute($url=null,$newLocale=null)
-//    {
-//
-//        $locale     = app()->getLocale();
-//        $newLocale  = $newLocale ?? $locale;
-//
-//        if ($url)
-//        {
-//            if (! \Request::is($url))
-//            {
-//                return null;
-//            }
-//
-//            return $newLocale;
-//
-//        }
-//
-//        $urlBaseLocale = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/". $locale ."$_SERVER[REQUEST_URI]";
-//
-//        if (! \Request::is($urlBaseLocale))
-//        {
-//            return null;
-//        }
-//        return $newLocale;
-//
-//    }
+    
 
 }
 
