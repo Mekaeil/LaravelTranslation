@@ -53,9 +53,14 @@ Add Provider : config > app.php
 
 Add Middleware in Kernel File
 ``` 
+use Mekaeil\LaravelTranslation\Http\Middleware\SetRouteBaseLocale;
 use Mekaeil\LaravelTranslation\Http\Middleware\UserLocale;
+
 -----
+
 UserLocale::class,
+SetRouteBaseLocale::class,
+    
 ```
 Add this Route:<br>
 in this route redirect to base locale.

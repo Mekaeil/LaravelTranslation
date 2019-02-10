@@ -21,7 +21,7 @@ class Handler extends ExceptionHandler
 
         /// CHECK IF ROUTE BASE LOCALE THROW TO 404 REMOVE LOCALE IN URL
         ///////////////////////////////////////////////////////////////////////////////
-        if ($exception instanceof NotFoundHttpException)
+        if ($exception instanceof NotFoundHttpException && $_SERVER['REQUEST_METHOD'] == 'GET')
         {
             $locale         = app('encrypter')->decrypt(request()->cookie('language'), false) ?? app()->getLocale();
             $currentURL     = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
