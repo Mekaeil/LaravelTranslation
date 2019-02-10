@@ -57,6 +57,31 @@ use Mekaeil\LaravelTranslation\Http\Middleware\UserLocale;
 -----
 UserLocale::class,
 ```
+Add this Route:<br>
+in this route redirect to base locale.
+``` 
+Route::get('{uri?}', [
+    'uses'      => 'PublicTransController@changeLocale',
+])->where('uri', '.*');
+```
+Create PublicTransController in your path controller and add this function for set redirection.
+``` 
+    public function changeLocale(Request $request)
+    {
+        $locale = \Cookie::get('language') ?? app()->getLocale();
+        $getURL = Translation::getUrlBaseLocale($locale);
+
+        if (! \Request::is($getURL))
+        {
+            $newUrl = str_replace('/'.$locale,'',$getURL);
+            return redirect()->to($newUrl);
+        }
+
+        return Translation::uri($getURL,$locale,'redirect');
+    }
+```
+
+
 
 ### SEEDS [ step : 4 ]
 
@@ -477,6 +502,13 @@ Get and save style defined for language in blade
         {!! $asset->link_script ?? '' !!}
     @endif
 ```
+Or add custom style in master blade file. 
+``` 
+@if( \Cookie::get('direction') == 'rtl' )
+    <link rel="stylesheet" href="{{ asset('css/rtl.css') }}">
+@endif
+```
+
 **IMPORTANT**
 
 In setAssets() method, first search cookie with assets key, if find it 

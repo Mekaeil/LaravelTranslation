@@ -127,6 +127,7 @@ class FlagTranslateController extends CoreTranslateController
         {
 
             Translation::clearCache(['language','direction','assets']);
+            $getURL = Translation::getUrlBaseLocale($getLanguage->name);
 
             //// CHANGE USER DEFAULT LANGUAGE AND SET COOKIES
             ////////////////////////////////////////////////////////////////
@@ -134,15 +135,16 @@ class FlagTranslateController extends CoreTranslateController
             {
                 Translation::setUserLocale($userID,$getLanguage->id);
 
-                return response()->json("Switch Language to $getLanguage->display_name for user with id=$userID ");
+                return response()->json([
+                    'url'       => Translation::uri($getURL,$getLanguage->name),
+                    'message'   => "Switch language to $getLanguage->display_name",
+                ]);
             }
 
             Translation::setUserLocale(null,$getLanguage->id);
 
-//            return redirect()->to(Translation::uri(Translation::getUrlBaseLocale($getLanguage->name)));
-
             return response()->json([
-                'url'       => Translation::uri(Translation::getUrlBaseLocale($langName)),
+                'url'       => Translation::uri($getURL,$getLanguage->name),
                 'message'   => "Switch language to $getLanguage->display_name",
             ]);
         }

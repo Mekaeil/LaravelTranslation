@@ -167,7 +167,3 @@
             ->name('lang.switch.language');
 
     });
-
-//Route::get('{uri?}', [
-//    'uses'  => 'Mekaeil\LaravelTranslation\Http\Controller\CoreTranslateController@uri',
-//])->where('uri', '.*');
