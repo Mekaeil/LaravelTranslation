@@ -2,7 +2,9 @@
 
 namespace Mekaeil\LaravelTranslation;
 
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\ServiceProvider;
+use Mekaeil\LaravelTranslation\Exceptions\Handler;
 use Mekaeil\LaravelTranslation\Repository\Contracts\AssetRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\BaseRepositoryInterface;
 use Mekaeil\LaravelTranslation\Repository\Contracts\FlagRepositoryInterface;
@@ -24,6 +26,10 @@ class LaravelTranslationProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->app->bind(
+            ExceptionHandler::class,
+            Handler::class
+        );
 
         if (file_exists(app_path('/../routes/route.laratrans.php'))){
             $this->loadRoutesFrom(app_path('/../routes/route.laratrans.php'));
