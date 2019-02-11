@@ -27,6 +27,9 @@ class SetRouteBaseLocale
 
             $pathLocaleURL = substr(parse_url($getURL, PHP_URL_PATH),1);
 
+            ////// REMOVE '/' AT THE END OF THE URL'S PATH
+            $pathLocaleURL = substr($pathLocaleURL,strlen($pathLocaleURL)-1 ) == '/' ? substr($pathLocaleURL,0,strlen($pathLocaleURL)-1 ) : $pathLocaleURL;
+
             if( $this->checkRoute($pathLocaleURL) &&  $currentURL != $getURL )
             {
                 return redirect()->to(Translation::uri($getURL,$locale));
