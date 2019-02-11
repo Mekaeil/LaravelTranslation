@@ -29,7 +29,7 @@ class Handler extends ExceptionHandler
 
             if ($ifLocaleExist)
             {
-                $newUrl   =  str_replace('/'.$locale,'',$currentURL);
+                $newUrl   =  str_replace('/'.$locale.'/','/',$currentURL);
                 return redirect()->to($newUrl);
             }
 
