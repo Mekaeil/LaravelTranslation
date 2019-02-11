@@ -625,7 +625,7 @@ class TransHelper
 //
 //            }
 
-            $urlWithNewLocale   =  str_replace($locale,$newLocale,$url);
+            $urlWithNewLocale   =  str_replace('/'.$locale.'/','/'.$newLocale.'/',$url);
             if (!$type)
             {
                 return $urlWithNewLocale;
@@ -641,7 +641,7 @@ class TransHelper
         {
 
             $urlBaseLocale      = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-            $urlWithoutLocale   =  str_replace('/'.$locale,'',$urlBaseLocale);
+            $urlWithoutLocale   =  str_replace('/'.$locale.'/','/',$urlBaseLocale);
 
             if (!$type)
             {
@@ -651,7 +651,7 @@ class TransHelper
 
         }
 
-        $urlBaseLocale   =  str_replace($locale,$newLocale,$urlBaseLocale);
+        $urlBaseLocale   =  str_replace('/'.$locale.'/','/'.$newLocale.'/',$urlBaseLocale);
         if (!$type)
         {
             return $urlBaseLocale;
@@ -688,7 +688,7 @@ class TransHelper
         $target    .= parse_url($url, PHP_URL_QUERY) ? '/' . parse_url($url, PHP_URL_QUERY) : '';
         $target    .= parse_url($url, PHP_URL_FRAGMENT) ? '/' . parse_url($url, PHP_URL_FRAGMENT) : '';
 
-        return  str_replace($currentLocale,$locale,$target);
+        return  str_replace('/'.$currentLocale.'/','/'.$locale.'/',$target);
     }
     
 

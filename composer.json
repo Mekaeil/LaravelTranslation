@@ -3,13 +3,17 @@
   "description": "This package used for multilingual website in Laravel framework.",
   "type": "library",
   "license": "MIT",
+  "homepage": "https://mekaeil.me",
   "authors": [
     {
-      "name": "mekaeil",
+      "name": "Mekaeil Andisheh",
       "email": "maikel1370@gmail.com"
     }
   ],
-  "require": {},
+  "require": {
+    "php": ">=7.0",
+    "laravel/framework": "5.*"
+  },
   "autoload": {
     "psr-4": {
       "Mekaeil\\LaravelTranslation\\": "src/"
