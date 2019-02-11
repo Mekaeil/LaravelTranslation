@@ -34,6 +34,7 @@ class SetRouteBaseLocale
             {
                 return redirect()->to(Translation::uri($getURL,$locale));
             }
+
         }
 
         return $next($request);
