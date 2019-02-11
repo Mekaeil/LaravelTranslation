@@ -685,8 +685,8 @@ class TransHelper
         $target    .= parse_url($url, PHP_URL_PORT);
         $target    .= !$ifLocaleExist ? '/' . $currentLocale : '';
         $target    .= parse_url($url, PHP_URL_PATH);
-        $target    .= parse_url($url, PHP_URL_QUERY) ? '/' . parse_url($url, PHP_URL_QUERY) : '';
-        $target    .= parse_url($url, PHP_URL_FRAGMENT) ? '/' . parse_url($url, PHP_URL_FRAGMENT) : '';
+        $target    .= parse_url($url, PHP_URL_QUERY) ? '?' . parse_url($url, PHP_URL_QUERY) : '';
+        $target    .= parse_url($url, PHP_URL_FRAGMENT) ? '#' . parse_url($url, PHP_URL_FRAGMENT) : '';
 
         return  str_replace('/'.$currentLocale.'/','/'.$locale.'/',$target);
     }
