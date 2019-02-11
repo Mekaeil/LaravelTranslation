@@ -680,7 +680,9 @@ class TransHelper
         $ifLocaleExist = strpos($url,$currentLocale);
 
         $target     = parse_url($url, PHP_URL_SCHEME) . "://";
-        $target    .= parse_url($url, PHP_URL_HOST) . ':'. parse_url($url, PHP_URL_PORT);
+        $target    .= parse_url($url, PHP_URL_HOST);
+        $target    .= parse_url($url, PHP_URL_PORT) ? ':' : '';
+        $target    .= parse_url($url, PHP_URL_PORT);
         $target    .= !$ifLocaleExist ? '/' . $currentLocale : '';
         $target    .= parse_url($url, PHP_URL_PATH);
         $target    .= parse_url($url, PHP_URL_QUERY) ? '/' . parse_url($url, PHP_URL_QUERY) : '';
