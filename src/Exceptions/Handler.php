@@ -5,6 +5,7 @@ namespace Mekaeil\LaravelTranslation\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Cookie;
+use Mekaeil\LaravelTranslation\Repository\Facade\Translation;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\Crypt;
 
