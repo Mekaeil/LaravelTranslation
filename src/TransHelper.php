@@ -2,6 +2,7 @@
 
 namespace Mekaeil\LaravelTranslation\TransHelper;
 
+use FlagTranslation;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Request;
@@ -677,6 +678,28 @@ class TransHelper
     public function getParseUrl($url,$locale)
     {
         $currentLocale = app()->getLocale();
+
+        /// CHECK IF USER ON HOME PAGE
+        ////////////////////////////////////////////////////////////////////////////
+        $startPos  = strpos($url,parse_url($url, PHP_URL_PATH)) + 1;
+        $oldLocale = substr( $url,$startPos,2);
+        if($this->ifOnHomePage($oldLocale,$url) &&  substr( $url,$startPos) < 2)
+        {
+
+            $ifLocaleExist = strpos($url,$currentLocale);
+
+            $target     = parse_url($url, PHP_URL_SCHEME) . "://";
+            $target    .= parse_url($url, PHP_URL_HOST);
+            $target    .= parse_url($url, PHP_URL_PORT) ? ':' : '';
+            $target    .= parse_url($url, PHP_URL_PORT);
+            $target    .= parse_url($url, PHP_URL_PATH);
+            $target    .= parse_url($url, PHP_URL_QUERY) ? '?' . parse_url($url, PHP_URL_QUERY) : '';
+            $target    .= parse_url($url, PHP_URL_FRAGMENT) ? '#' . parse_url($url, PHP_URL_FRAGMENT) : '';
+
+            return  str_replace('/'.$oldLocale,'/'.$currentLocale,$target);
+        }
+
+
         $ifLocaleExist = strpos($url,$currentLocale);
 
         $target     = parse_url($url, PHP_URL_SCHEME) . "://";
@@ -690,7 +713,40 @@ class TransHelper
 
         return  str_replace('/'.$currentLocale.'/','/'.$locale.'/',$target);
     }
-    
+
+
+    public function ifOnHomePage($oldLocale,$url=null)
+    {
+        $home         = url('/');
+        $currentURL   = $url ?? (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+        if ($_SERVER['REQUEST_METHOD']=='POST')
+        {
+            $currentURL     = \Session::get('_previous')['url'];
+
+            $target     = parse_url($currentURL, PHP_URL_SCHEME) . "://";
+            $target    .= parse_url($currentURL, PHP_URL_HOST);
+            $target    .= parse_url($currentURL, PHP_URL_PORT) ? ':' : '';
+            $target    .= parse_url($currentURL, PHP_URL_PORT);
+            $home       = $target;
+        }
+
+        return ( $currentURL == $home . '/' . $oldLocale || $currentURL == $home . '/' . $oldLocale . '/' );
+    }
+
+
+    function checkRoute($route)
+    {
+        $routes = \Route::getRoutes()->getRoutes();
+        foreach($routes as $r)
+        {
+            if($r->uri() == $route){
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }
 
